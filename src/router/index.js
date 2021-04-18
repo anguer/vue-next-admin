@@ -3,7 +3,7 @@
  * @author anguer
  * @date Create by 2021-04-18
  */
-import { createRouter, createWebHistory, } from 'vue-router';
+import { createRouter, createWebHashHistory } from 'vue-router';
 
 /* Layout */
 import Layout from '@/layout/index.vue';
@@ -39,7 +39,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(import.meta.env.BASE_URL),
   routes
 });
 
