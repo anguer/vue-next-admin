@@ -6,7 +6,7 @@ import path from 'path';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/vue-next-admin/',
+  // base: '/vue-next-admin/',
   plugins: [
     vue(),
     styleImport({
