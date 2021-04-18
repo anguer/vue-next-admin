@@ -1,11 +1,15 @@
 <template>
   <div class="login-wrapper">
-    <el-form>
-      <el-form-item>
-        <el-input ></el-input>
+    <el-form :model="form" status-icon :rules="rules" ref="ruleForm">
+      <el-form-item label="用户名" prop="username">
+        <el-input v-model="form.username"></el-input>
+      </el-form-item>
+      <el-form-item label="密码" prop="password">
+        <el-input v-model="form.password" type="password"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-input ></el-input>
+        <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
+        <el-button @click="resetForm('ruleForm')">重置</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -13,7 +17,51 @@
 
 <script>
 export default {
-name: 'index'
+  data () {
+    const validateUser = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('用户名不能为空'));
+      } else {
+        callback();
+      }
+    };
+    const validatePass = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入密码'));
+      } else {
+        callback();
+      }
+    };
+    return {
+      form: {
+        username: '',
+        password: '',
+      },
+      rules: {
+        username: [
+          { validator: validateUser, trigger: 'blur' }
+        ],
+        password: [
+          { validator: validatePass, trigger: 'blur' }
+        ],
+      }
+    };
+  },
+  methods: {
+    submitForm (formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          alert('submit!');
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
+    },
+    resetForm (formName) {
+      this.$refs[formName].resetFields();
+    }
+  }
 };
 </script>
 
