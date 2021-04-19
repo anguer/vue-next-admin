@@ -1,0 +1,18 @@
+/* BEM
+ -------------------------- */
+@mixin page($page) {
+  //$B: 'page-'+$page !global;
+  $B: $page+'-container' !global;
+
+  .#{$B} {
+    @content;
+  }
+}
+
+@mixin widget($widget) {
+  $B: $widget !global;
+
+  .#{$B} {
+    @content;
+  }
+}

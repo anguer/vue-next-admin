@@ -3,7 +3,8 @@
  * @author anguer
  * @date Create by 2021-04-18
  */
-import router from './router'
+import router from './router';
+import store from './store';
 import { getStorage, TokenKey } from '@/helper/storage'
 
 // no redirect whitelist
@@ -33,9 +34,6 @@ router.beforeEach(async (to, from, next) => {
   //   next({ path: '/login'});
   // }
   // ]]]
+  await store.dispatch('GenerateRoutes', []);
   next();
 });
-
-export default function () {
-
-}
