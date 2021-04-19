@@ -1,21 +1,20 @@
 <template>
-  <div :class="classObj" class="app-wrapper">
-    <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside"></div>
-    <sidebar class="sidebar-container"/>
-    <div class="main-container">
-      <navbar style="background: #3a8ee6;" />
-      <app-main class="app-main" />
-    </div>
-  </div>
+  <div v-if="mobile&&sidebar.opened" class="drawer-bg" @click="handleClickOutside"></div>
+  <sidebar :collapse="!sidebar.opened" :mobile="mobile" />
+  <major :collapse="!sidebar.opened" :mobile="mobile">
+    <template #navbar>
+      <navbar />
+    </template>
+  </major>
 </template>
 
 <script>
-import { AppMain, Navbar, Sidebar } from './components';
+import { Major, Navbar, Sidebar } from './components';
 import ResizeMixin from './mixin/ResizeHandler';
 
 export default {
   name: 'Layout',
-  components: { AppMain, Navbar, Sidebar },
+  components: { Major, Navbar, Sidebar },
   mixins: [ResizeMixin],
   computed: {
     sidebar () {
@@ -24,14 +23,9 @@ export default {
     device () {
       return this.$store.state.app.device;
     },
-    classObj () {
-      return {
-        hideSidebar: !this.sidebar.opened,
-        openSidebar: this.sidebar.opened,
-        withoutAnimation: this.sidebar.withoutAnimation,
-        mobile: this.device === 'mobile'
-      };
-    }
+    mobile () {
+      return this.device === 'mobile';
+    },
   },
   methods: {
     handleClickOutside () {
@@ -42,20 +36,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "src/styles/mixins/utils.scss";
-
-.app-wrapper {
-  @include clearfix;
-  position: relative;
-  height: 100%;
-  width: 100%;
-
-  &.mobile.openSidebar {
-    position: fixed;
-    top: 0;
-  }
-}
-
 .drawer-bg {
   background: #000;
   opacity: 0.3;

@@ -36,12 +36,13 @@ export default {
       if (!this.isExternalLink(this.to)) {
         e.preventDefault();
         if (this.$route.path === this.to) {
-          this.$router.push({
-            path: '/redirect',
-            query: {
-              path: this.to
-            }
-          });
+          this.$router.push(this.to);
+          // this.$router.push({
+          //   path: '/redirect',
+          //   query: {
+          //     path: this.to
+          //   }
+          // });
         } else {
           this.$router.push(this.to);
         }

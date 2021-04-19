@@ -22,7 +22,6 @@ $subMenuHover: mix(#fff, #409EFF, 90%) !default;
 $sideBarWidth: 210px;
 
 @import 'mixins/utils';
-@import 'layout';
 @import 'sidebar';
 
 html, body {
