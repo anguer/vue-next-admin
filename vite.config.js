@@ -1,7 +1,6 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import styleImport from 'vite-plugin-style-import';
-import { name } from './package.json';
 
 import path from 'path';
 
@@ -14,7 +13,7 @@ export default defineConfig({
    * In most cases please use '/' !!!
    * Detail: https://vue3js.cn/vite/config/#base
    */
-  base: process.env.NODE_ENV === 'production' ? `/${name}/` : '/',
+  base: '/vue-next-admin/',
   assetsDir: '',
   plugins: [
     vue(),
