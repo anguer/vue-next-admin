@@ -7,6 +7,7 @@
 // import 'element-plus/packages/theme-chalk/src/base.scss'
 
 import {
+  ElAffix,
   ElAlert,
   ElAside,
   ElAutocomplete,
@@ -94,6 +95,7 @@ import {
 
 export default function (app) {
   const components = [
+    ElAffix,
     ElAlert,
     ElAside,
     ElAutocomplete,

@@ -57,7 +57,49 @@ export const constantRoutes = [
         name: 'input',
         path: 'input',
         component: () => import('@/views/form/input.vue'),
-        children: '',
+        children: [
+          {
+            name: 'input-table',
+            path: 'table',
+            component: () => import('@/views/form/table.vue'),
+            children: '',
+            meta: {
+              title: 'Table',
+              icon: 'el-icon-s-home'
+            }
+          },
+          {
+            name: 'input-input',
+            path: 'input',
+            component: () => import('@/views/form/input.vue'),
+            children: [
+              {
+                name: 'input-input-table',
+                path: 'table',
+                component: () => import('@/views/form/table.vue'),
+                children: '',
+                meta: {
+                  title: 'Table',
+                  icon: 'el-icon-s-home'
+                }
+              },
+              {
+                name: 'input-input-input',
+                path: 'input',
+                component: () => import('@/views/form/input.vue'),
+                children: '',
+                meta: {
+                  title: 'Input',
+                  icon: 'el-icon-s-home'
+                }
+              }
+            ],
+            meta: {
+              title: 'Input',
+              icon: 'el-icon-s-home'
+            }
+          }
+        ],
         meta: {
           title: 'Input',
           icon: 'el-icon-s-home'

@@ -1,6 +1,6 @@
 <template>
   <div class="major-container" :class="{ collapse, mobile }">
-    <slot name="navbar" />
+    <el-affix position="top" :offset="0"><slot name="navbar" /></el-affix>
     <router-view class="app-main" />
   </div>
 </template>
@@ -31,7 +31,7 @@ export default {
   position: relative;
 
   &.collapse {
-    margin-left: 54px;
+    margin-left: 64px;
   }
 
   &.mobile {

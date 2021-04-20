@@ -1,6 +1,8 @@
 <template>
-  <div class="sidebar-container" :class="{ collapse, mobile }">
-    <div style="line-height: 50px; font-size: 20px; text-align: center;">LG</div>
+  <el-scrollbar class="sidebar-container" :class="{ collapse, mobile }">
+    <el-affix position="top" :offset="0">
+      <div class="sidebar-logo">LG</div>
+    </el-affix>
     <el-menu
       :default-active="$route.path"
       background-color="#fff"
@@ -14,7 +16,7 @@
     >
       <sidebar-item v-for="(route, index) in permission_routes" :key="index" :item="route" :base-path="route.path"/>
     </el-menu>
-  </div>
+  </el-scrollbar>
 </template>
 
 <script>
@@ -46,7 +48,7 @@ export default {
 };
 </script>
 
-<style rel="stylesheet/scss" lang="scss" scoped>
+<style rel="stylesheet/scss" lang="scss" scoped >
 $menuHover: mix(#fff, #409EFF, 90%) !default;
 $menuActive: mix(#fff, #409EFF, 90%) !default;
 $subMenuHover: mix(#fff, #409EFF, 90%) !default;
@@ -64,12 +66,27 @@ $subMenuActiveText: #409EFF; // rgba(255, 255, 255, 0.85); //https://github.com/
   background-color: #fff;
   height: 100%;
   position: fixed;
-  font-size: 0px;
+  font-size: 0;
   top: 0;
   bottom: 0;
   left: 0;
   z-index: 1001;
-  //overflow: hidden;
+  overflow: hidden;
+
+  .sidebar-logo {
+    position: relative;
+    z-index: 10;
+    //width: 100%;
+    height: 50px;
+    padding: 0 20px;
+    color: #303133;
+    background-color: #fff;
+    //box-shadow: 0 -5px 10px 2px #272727;
+    overflow: hidden;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+  }
 
   // reset element-ui css
   ::v-deep(.el-menu) {
@@ -81,13 +98,15 @@ $subMenuActiveText: #409EFF; // rgba(255, 255, 255, 0.85); //https://github.com/
     .el-menu-item, .el-submenu__title {
       height: 40px;
       line-height: 40px;
+      overflow: hidden;
+      text-overflow: ellipsis;
 
-      //[class^="el-icon-"], svg {
-      //  margin-right: 16px;
-      //}
-      //.el-submenu__icon-arrow {
-      //  color: inherit !important;
-      //}
+      [class^="el-icon-"] {}
+
+      .el-submenu__icon-arrow {
+        color: inherit !important;
+        font-size: 14px;
+      }
     }
 
     // menu active ✅
@@ -97,6 +116,10 @@ $subMenuActiveText: #409EFF; // rgba(255, 255, 255, 0.85); //https://github.com/
       color: #409EFF !important;
       background-color: $menuHover !important;
       //background-color: $menuActive !important;
+
+      [class^="el-icon-"] {
+        color: inherit;
+      }
     }
 
     // menu hover ✅
@@ -107,114 +130,11 @@ $subMenuActiveText: #409EFF; // rgba(255, 255, 255, 0.85); //https://github.com/
         background-color: $menuHover !important;
       }
     }
-
-    //.is-active > .el-submenu__title {
-    //  color: #409EFF !important;
-    //}
-
-    //.is-opened > .el-submenu__title {
-    //  background-color: #fff !important;
-    //}
-
-    // menu hover
-    //.submenu-title-noDropdown,
-    //.el-submenu__title {
-    //  padding-left: 18px !important;
-    //  //&:hover {
-    //  //  background-color: $menuHover !important;
-    //  //}
-    //}
-
-    //& .nest-menu .el-submenu > .el-submenu__title,
-    //& .el-submenu .el-menu-item {
-    //  min-width: $sideBarWidth !important;
-    //  background-color: #fff !important;
-    //
-    //  //&:hover {
-    //  //  background-color: $subMenuHover !important;
-    //  //}
-    //}
   }
-
-  // reset element-ui css
-  //.horizontal-collapse-transition {
-  //  transition: 0s width ease-in-out, 0s padding-left ease-in-out, 0s padding-right ease-in-out;
-  //}
-
-  //.el-scrollbar__bar.is-vertical {
-  //  right: 0px;
-  //}
-
-  //.el-scrollbar {
-  //  height: 100%;
-  //}
-
-  //&.has-logo {
-  //  .el-scrollbar {
-  //    height: calc(100% - 50px);
-  //  }
-  //}
-
-  //.is-horizontal {
-  //  display: none;
-  //}
-
-  //a {
-  //  display: inline-block;
-  //  width: 100%;
-  //  overflow: hidden;
-  //  white-space: nowrap;
-  //}
-
-  /* TODO 这句好像没有用 */
-  //.el-menu--collapse .el-menu .el-submenu {
-  //  min-width: $sideBarWidth !important;
-  //}
 
   // 收起效果
   &.collapse {
-    width: 54px !important;
-
-    ::v-deep(.el-menu) {
-      .submenu-title-noDropdown {
-        //padding: 0 !important;
-        //position: relative;
-
-        .el-tooltip {
-          padding: 0 !important;
-
-          [class^="el-icon-"], svg {
-            margin-left: 18px;
-          }
-        }
-      }
-
-      .el-submenu {
-        overflow: hidden;
-
-        & > .el-submenu__title {
-          padding: 0 !important;
-
-          [class^="el-icon-"], svg {
-            margin-left: 18px;
-          }
-        }
-      }
-
-      .el-menu--collapse {
-        .el-submenu {
-          & > .el-submenu__title {
-            & > span {
-              height: 0;
-              width: 0;
-              overflow: hidden;
-              visibility: hidden;
-              display: inline-block;
-            }
-          }
-        }
-      }
-    }
+    width: 64px !important;
   }
 
   &.mobile {

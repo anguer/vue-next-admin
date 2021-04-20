@@ -28,14 +28,15 @@ export default {
 
 <style rel="stylesheet/scss" lang="scss" scoped>
 .navbar {
+  position: relative;
+  z-index: 10;
   height: 50px;
   line-height: 50px;
   border-radius: 0 !important;
-  border: none !important;
-  position: relative;
   color: #303133;
   background-color: #fff;
-  box-shadow: 0px -5px 10px 2px rgba(39, 39, 39, 1);
+  border: none !important;
+  //box-shadow: 0px -5px 10px 2px #272727;
   display: flex;
 
   .hamburger-container {
