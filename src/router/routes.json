@@ -2,7 +2,6 @@
   {
     "hidden": true,
     "alwaysShow": false,
-    "name": "Login",
     "url": "/login",
     "path": "/login/index.vue",
     "title": "Login",
@@ -11,7 +10,6 @@
   {
     "hidden": false,
     "alwaysShow": false,
-    "name": "Dashboard",
     "url": "/",
     "path": "",
     "title": "Dashboard",
@@ -20,7 +18,6 @@
       {
         "hidden": false,
         "alwaysShow": true,
-        "name": "DashboardIndex",
         "url": "",
         "path": "/index.vue",
         "title": "Dashboard",
@@ -31,37 +28,51 @@
   {
     "hidden": false,
     "alwaysShow": true,
-    "name": "Form",
     "url": "/form",
     "path": "",
-    "title": "Form",
+    "title": "多层级菜单",
     "icon": "el-icon-s-home",
     "children": [
       {
         "hidden": false,
         "alwaysShow": false,
-        "name": "FormSelect",
         "url": "select",
         "path": "/form/select.vue",
-        "title": "Select",
+        "title": "菜单一",
         "icon": "el-icon-s-home"
       },
       {
         "hidden": false,
         "alwaysShow": false,
-        "name": "FormTable",
         "url": "table",
         "path": "/form/table.vue",
-        "title": "Table",
-        "icon": "el-icon-s-home"
+        "title": "菜单二",
+        "icon": "el-icon-s-home",
+        "children": [
+          {
+            "hidden": false,
+            "alwaysShow": false,
+            "url": "table",
+            "path": "/form/table.vue",
+            "title": "菜单二杠一",
+            "icon": "el-icon-s-home"
+          },
+          {
+            "hidden": false,
+            "alwaysShow": false,
+            "url": "input",
+            "path": "/form/input.vue",
+            "title": "菜单二杠二",
+            "icon": "el-icon-s-home"
+          }
+        ]
       },
       {
         "hidden": false,
         "alwaysShow": false,
-        "name": "FormInput",
         "url": "input",
         "path": "/form/input.vue",
-        "title": "Input",
+        "title": "菜单三",
         "icon": "el-icon-s-home"
       }
     ]

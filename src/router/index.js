@@ -28,7 +28,7 @@ export const translate = (arr = [], isRoot = true) => arr.map(t => {
   return obj;
 });
 
-console.log('#routes', translate(routes));
+// console.log('#routes', translate(routes));
 export const constantRoutes = translate(routes);
 export const asyncRoutes = [];
 export function resetRouter () {}
