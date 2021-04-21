@@ -14,7 +14,7 @@
       mode="vertical"
       router
     >
-      <sidebar-item v-for="(route, index) in permission_routes" :key="index" :item="route" :base-path="route.path"/>
+      <sidebar-item v-for="(route, index) in permission_routes" :key="index" :item="route" :base-path="route.path" />
     </el-menu>
   </el-scrollbar>
 </template>
@@ -49,20 +49,9 @@ export default {
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped >
-$menuHover: mix(#fff, #409EFF, 90%) !default;
-$menuActive: mix(#fff, #409EFF, 90%) !default;
-$subMenuHover: mix(#fff, #409EFF, 90%) !default;
-
-$sideBarWidth: 210px;
-// sidebar
-$menuHeight: 40px;
-$menuText: #303133; // rgba(255, 255, 255, 0.85);
-$menuActiveText: #409EFF; // rgba(255, 255, 255, 0.85);
-$subMenuActiveText: #409EFF; // rgba(255, 255, 255, 0.85); //https://github.com/ElemeFE/element/issues/12951
-
 .sidebar-container {
   transition: width 0.28s;
-  width: $sideBarWidth !important;
+  //width: 210px !important;
   background-color: #fff;
   height: 100%;
   position: fixed;
@@ -87,97 +76,6 @@ $subMenuActiveText: #409EFF; // rgba(255, 255, 255, 0.85); //https://github.com/
     display: flex;
     align-items: center;
   }
-
-  // reset element-ui css
-  ::v-deep(.el-menu) {
-    border: none;
-    height: 100%;
-    width: 100%;
-
-    // set height ✅
-    .el-menu-item, .el-submenu__title {
-      height: 40px;
-      line-height: 40px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-
-      [class^="el-icon-"] {}
-
-      .el-submenu__icon-arrow {
-        color: inherit !important;
-        font-size: 14px;
-      }
-    }
-
-    // menu active ✅
-    .el-menu-item.is-active,
-    .el-submenu .el-menu-item.is-active,
-    .el-submenu.is-active > .el-submenu__title {
-      color: #409EFF !important;
-      background-color: $menuHover !important;
-      //background-color: $menuActive !important;
-
-      [class^="el-icon-"] {
-        color: inherit;
-      }
-    }
-
-    // menu hover ✅
-    .el-menu-item,
-    .el-submenu .el-menu-item,
-    .el-submenu > .el-submenu__title {
-      &:hover {
-        background-color: $menuHover !important;
-      }
-    }
-  }
-
-  // 收起效果
-  &.collapse {
-    width: 64px !important;
-  }
-
-  &.mobile {
-    transition: transform .28s;
-    width: $sideBarWidth !important;
-  }
-
-  &.mobile.collapse {
-    pointer-events: none;
-    transition-duration: 0.3s;
-    transform: translate3d(-$sideBarWidth, 0, 0);
-  }
 }
-
-// when menu collapsed
-// doesn't work
-//.submenu-wrapper.el-menu--vertical {
-//  & > .el-menu {
-//    .el-menu-item, .el-submenu__title {
-//      height: $menuHeight !important;
-//      line-height: $menuHeight !important;
-//    }
-//
-//    [class^="el-icon-"], svg {
-//      margin-right: 18px;
-//    }
-//  }
-//
-//  .nest-menu .el-submenu > .el-submenu__title,
-//  .el-menu-item {
-//    &:hover {
-//      // you can use $subMenuHover
-//      background-color: $menuHover !important;
-//    }
-//  }
-//
-//  // the scroll bar appears when the subMenu is too long
-//  > .el-menu--popup {
-//    padding: 0 !important;
-//    max-height: 100vh;
-//    overflow-y: auto;
-//
-//    //@include scrollBar;
-//  }
-//}
 </style>
+

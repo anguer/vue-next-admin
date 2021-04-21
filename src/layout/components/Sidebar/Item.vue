@@ -1,6 +1,6 @@
 <template>
   <i v-if="icon" :class="icon" />
-  <span v-if="title" v-html="title" />
+  <span>{{ title }}</span>
 </template>
 
 <script>

@@ -4,117 +4,32 @@
  * @date Create by 2021-04-18
  */
 import { createRouter, createWebHashHistory } from 'vue-router';
+import routes from './routes.json';
 
 /* Layout */
 import Layout from '@/layout/index.vue';
 
-export const constantRoutes = [
-  {
-    hidden: true,
-    path: '/login',
-    name: 'Login',
-    component: () => import('../views/login/index.vue')
-  },
-  {
-    name: 'Dashboard',
-    path: '/',
-    component: Layout,
-    children: [
-      {
-        path: '',
-        component: () => import('@/views/index.vue'),
-        name: 'Dashboard',
-        meta: { title: 'Dashboard', icon: 'el-icon-s-home', affix: true }
-      }
-    ],
-    redirect: 'noredirect',
-  },
-  {
-    name: 'form',
-    path: '/form',
-    children: [
-      {
-        name: 'select',
-        path: 'select',
-        component: () => import('@/views/form/select.vue'),
-        children: '',
-        meta: {
-          title: 'Select',
-          icon: 'el-icon-s-home'
-        }
-      },
-      {
-        name: 'table',
-        path: 'table',
-        component: () => import('@/views/form/table.vue'),
-        children: '',
-        meta: {
-          title: 'Table',
-          icon: 'el-icon-s-home'
-        }
-      },
-      {
-        name: 'input',
-        path: 'input',
-        component: () => import('@/views/form/input.vue'),
-        children: [
-          {
-            name: 'input-table',
-            path: 'table',
-            component: () => import('@/views/form/table.vue'),
-            children: '',
-            meta: {
-              title: 'Table',
-              icon: 'el-icon-s-home'
-            }
-          },
-          {
-            name: 'input-input',
-            path: 'input',
-            component: () => import('@/views/form/input.vue'),
-            children: [
-              {
-                name: 'input-input-table',
-                path: 'table',
-                component: () => import('@/views/form/table.vue'),
-                children: '',
-                meta: {
-                  title: 'Table',
-                  icon: 'el-icon-s-home'
-                }
-              },
-              {
-                name: 'input-input-input',
-                path: 'input',
-                component: () => import('@/views/form/input.vue'),
-                children: '',
-                meta: {
-                  title: 'Input',
-                  icon: 'el-icon-s-home'
-                }
-              }
-            ],
-            meta: {
-              title: 'Input',
-              icon: 'el-icon-s-home'
-            }
-          }
-        ],
-        meta: {
-          title: 'Input',
-          icon: 'el-icon-s-home'
-        }
-      }
-    ],
-    component: Layout,
-    redirect: 'noredirect',
-    alwaysShow: true,
+// menu tree to route tree
+export const translate = (arr = [], isRoot = true) => arr.map(t => {
+  const obj = {
+    hidden: t.hidden,
+    name: Symbol.for(t.title + Math.random()),
+    path: t.url,
+    component: (t.path && typeof t.path === 'string') ? () => import(`../views${t.path}`) : Layout,
     meta: {
-      title: 'Form',
-      icon: 'el-icon-s-home'
-    }
+      title: t.title,
+      icon: t.icon,
+    },
+    children: (t.children instanceof Array && t.children.length) ? translate(t.children, false) : null
+  };
+  if (isRoot) {
+    obj.alwaysShow = t.alwaysShow;
   }
-];
+  return obj;
+});
+
+console.log('#routes', translate(routes));
+export const constantRoutes = translate(routes);
 export const asyncRoutes = [];
 export function resetRouter () {}
 

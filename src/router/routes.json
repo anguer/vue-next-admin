@@ -1,0 +1,69 @@
+[
+  {
+    "hidden": true,
+    "alwaysShow": false,
+    "name": "Login",
+    "url": "/login",
+    "path": "/login/index.vue",
+    "title": "Login",
+    "icon": "el-icon-s-home"
+  },
+  {
+    "hidden": false,
+    "alwaysShow": false,
+    "name": "Dashboard",
+    "url": "/",
+    "path": "",
+    "title": "Dashboard",
+    "icon": "el-icon-s-home",
+    "children": [
+      {
+        "hidden": false,
+        "alwaysShow": true,
+        "name": "DashboardIndex",
+        "url": "",
+        "path": "/index.vue",
+        "title": "Dashboard",
+        "icon": "el-icon-s-home"
+      }
+    ]
+  },
+  {
+    "hidden": false,
+    "alwaysShow": true,
+    "name": "Form",
+    "url": "/form",
+    "path": "",
+    "title": "Form",
+    "icon": "el-icon-s-home",
+    "children": [
+      {
+        "hidden": false,
+        "alwaysShow": false,
+        "name": "FormSelect",
+        "url": "select",
+        "path": "/form/select.vue",
+        "title": "Select",
+        "icon": "el-icon-s-home"
+      },
+      {
+        "hidden": false,
+        "alwaysShow": false,
+        "name": "FormTable",
+        "url": "table",
+        "path": "/form/table.vue",
+        "title": "Table",
+        "icon": "el-icon-s-home"
+      },
+      {
+        "hidden": false,
+        "alwaysShow": false,
+        "name": "FormInput",
+        "url": "input",
+        "path": "/form/input.vue",
+        "title": "Input",
+        "icon": "el-icon-s-home"
+      }
+    ]
+  }
+]

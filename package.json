@@ -6,7 +6,8 @@
     "build": "vite build --mode development",
     "build:test": "vite build --mode staging",
     "build:prod": "vite build --mode production",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "lint": "eslint \"{src,mock}/**/*.{vue,ts,tsx}\" --fix"
   },
   "dependencies": {
     "axios": "^0.21.1",
@@ -20,6 +21,9 @@
   "devDependencies": {
     "@vitejs/plugin-vue": "^1.2.1",
     "@vue/compiler-sfc": "^3.0.11",
+    "eslint": "^7.24.0",
+    "eslint-define-config": "^1.0.7",
+    "eslint-plugin-vue": "^7.9.0",
     "sass": "^1.32.10",
     "vite": "^2.1.5",
     "vite-plugin-style-import": "^0.9.2"
