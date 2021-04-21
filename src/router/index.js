@@ -8,6 +8,7 @@ import routes from './routes.json';
 
 /* Layout */
 import Layout from '@/layout/index.vue';
+const modules = import.meta.glob('../views/**/*.vue');
 
 // menu tree to route tree
 export const translate = (arr = [], isRoot = true) => arr.map(t => {
@@ -15,7 +16,8 @@ export const translate = (arr = [], isRoot = true) => arr.map(t => {
     hidden: t.hidden,
     name: Symbol.for(t.title + Math.random()),
     path: t.url,
-    component: (t.path && typeof t.path === 'string') ? () => import(`../views${t.path}`) : Layout,
+    // component: (t.path && typeof t.path === 'string') ? () => import(`../views${t.path}.vue`) : Layout,
+    component: (t.path && typeof t.path === 'string') ? modules[`../views${t.path}.vue`] : Layout,
     meta: {
       title: t.title,
       icon: t.icon,
