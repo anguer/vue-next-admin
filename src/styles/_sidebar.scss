@@ -1,0 +1,12 @@
+#app {
+
+  .withoutAnimation {
+
+    .major-container,
+    .sidebar-container {
+      transition: none;
+    }
+  }
+}
+
+

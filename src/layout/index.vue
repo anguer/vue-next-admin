@@ -1,60 +1,48 @@
 <template>
-  <el-container>
-    <el-aside width="200px">
-<!--      <sidebar />-->
-      <app-aside />
-    </el-aside>
-    <el-container>
-      <el-header>Header</el-header>
-      <el-main>
-        <router-view />
-      </el-main>
-      <el-footer>Footer</el-footer>
-    </el-container>
-  </el-container>
+  <div v-if="mobile&&sidebar.opened" class="drawer-bg" @click="handleClickOutside"></div>
+  <sidebar :collapse="!sidebar.opened" :mobile="mobile" />
+  <major :collapse="!sidebar.opened" :mobile="mobile">
+    <template #navbar>
+      <navbar />
+    </template>
+  </major>
 </template>
 
 <script>
-import AppAside from './components/aside.vue';
-// import Sidebar from './components/Sidebar/index.vue';
+import { Major, Navbar, Sidebar } from './components';
+import ResizeMixin from './mixin/ResizeHandler';
 
 export default {
-  components: { AppAside }
+  name: 'Layout',
+  components: { Major, Navbar, Sidebar },
+  mixins: [ResizeMixin],
+  computed: {
+    sidebar () {
+      return this.$store.state.app.sidebar;
+    },
+    device () {
+      return this.$store.state.app.device;
+    },
+    mobile () {
+      return this.device === 'mobile';
+    },
+  },
+  methods: {
+    handleClickOutside () {
+      this.$store.dispatch('CloseSideBar', { withoutAnimation: false });
+    }
+  }
 };
 </script>
 
-<style>
-.el-header, .el-footer {
-  background-color: #B3C0D1;
-  color: #333;
-  text-align: center;
-  line-height: 60px;
-}
-
-.el-aside {
-  background-color: #D3DCE6;
-  color: #333;
-  text-align: center;
-  line-height: 200px;
-}
-
-.el-main {
-  background-color: #E9EEF3;
-  color: #333;
-  text-align: center;
-  line-height: 160px;
-}
-
-body > .el-container {
-  margin-bottom: 40px;
-}
-
-.el-container:nth-child(5) .el-aside,
-.el-container:nth-child(6) .el-aside {
-  line-height: 260px;
-}
-
-.el-container:nth-child(7) .el-aside {
-  line-height: 320px;
+<style lang="scss" scoped>
+.drawer-bg {
+  background: #000;
+  opacity: 0.3;
+  width: 100%;
+  top: 0;
+  height: 100%;
+  position: absolute;
+  z-index: 999;
 }
 </style>

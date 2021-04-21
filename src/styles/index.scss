@@ -1,0 +1,56 @@
+// import style libraries
+
+// navbar
+$navbarText: #303133; // rgba(255, 255, 255, 0.85);
+$navbarBg: #fff; // #1769FF;
+$navbarShadow: rgba(39, 39, 39, 1);
+$navbarHeight: 50px;
+
+// sidebar
+$menuHeight: 40px;
+$menuText: #303133; // rgba(255, 255, 255, 0.85);
+$menuActiveText: #409EFF; // rgba(255, 255, 255, 0.85);
+$subMenuActiveText: #409EFF; // rgba(255, 255, 255, 0.85); //https://github.com/ElemeFE/element/issues/12951
+
+$menuBg: #fff;
+$menuHover: mix(#fff, #409EFF, 90%) !default;
+$menuActive: mix(#fff, #409EFF, 90%) !default;
+
+$subMenuBg: #fff;
+$subMenuHover: mix(#fff, #409EFF, 90%) !default;
+
+$sideBarWidth: 210px;
+
+@import 'mixins/utils';
+@import 'sidebar';
+
+html, body {
+  //-webkit-touch-callout: none;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+  -webkit-text-size-adjust: none;
+  -moz-text-size-adjust: none;
+  text-size-adjust: none;
+  -webkit-tap-highlight-color: transparent;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  color: #000;
+  word-wrap: break-word;
+  font-size: 14px;
+
+  font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+  height: 100%;
+  text-rendering: optimizeLegibility;
+  -webkit-backface-visibility: hidden;
+  -webkit-user-drag: none;
+  -ms-content-zooming: none;
+}
+
+#app {
+  height: 100%;
+}
