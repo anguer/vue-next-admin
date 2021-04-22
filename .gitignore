@@ -7,4 +7,3 @@ dist
 dist-ssr
 
 *.local
-package-lock.json
