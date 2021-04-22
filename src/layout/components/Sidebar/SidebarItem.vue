@@ -3,32 +3,29 @@
     <template v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
 
       <app-link :to="resolvePath(onlyOneChild.path)">
-        <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}">
-          <template #title><span>{{ onlyOneChild.meta.title }}</span></template>
+        <el-menu-item :index="resolvePath(onlyOneChild.path)" class="vna-menu-item">
+          <template #title>
+            <span>{{ onlyOneChild.meta.title }}</span>
+          </template>
           <item v-if="onlyOneChild.meta" :icon="onlyOneChild.meta.icon||item.meta.icon" />
         </el-menu-item>
-<!--        <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}">-->
-<!--          <item v-if="onlyOneChild.meta" :icon="onlyOneChild.meta.icon||item.meta.icon"-->
-<!--                :title="onlyOneChild.meta.title" />-->
-<!--        </el-menu-item>-->
       </app-link>
     </template>
     <template v-else>
-      <el-submenu :index="resolvePath(item.path)" popper-class="submenu-wrapper">
+      <el-submenu :index="resolvePath(item.path)" class="vna-submenu" popper-class="vna-submenu-popper" popper-append-to-body>
         <template #title>
           <item v-if="item.meta" :icon="item.meta.icon" :title="item.meta.title" />
         </template>
 
-        <template v-for="(child, index) in item.children.filter(o => !o.hidden)">
+        <template v-for="(child, index) in item.children.filter(o => !o.hidden)" :key="index">
           <sidebar-item
             v-if="child.children&&child.children.length>0"
             :is-nest="true"
             :item="child"
-            :key="index"
             :base-path="resolvePath(child.path)"
-            class="nest-menu"/>
+          />
           <app-link v-else :to="resolvePath(child.path)">
-            <el-menu-item :index="resolvePath(child.path)">
+            <el-menu-item :index="resolvePath(child.path)" class="vna-menu-item">
               <item v-if="child.meta" :icon="child.meta.icon" :title="child.meta.title" />
             </el-menu-item>
           </app-link>

@@ -3,7 +3,7 @@
  * @author anguer
  * @date Create by 2021-04-18
  */
-import { createStore } from "vuex";
+import { createStore } from 'vuex';
 import getters from './getters';
 
 // https://vitejs.dev/guide/features.html#glob-import

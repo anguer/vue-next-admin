@@ -1,8 +1,8 @@
 <template>
-  <div class="major-container" :class="{ collapse, mobile }">
+  <el-scrollbar class="major-container" :class="{ collapse, mobile }">
     <el-affix position="top" :offset="0"><slot name="navbar" /></el-affix>
     <router-view class="app-main" />
-  </div>
+  </el-scrollbar>
 </template>
 
 <script>
@@ -27,16 +27,8 @@ export default {
   //@include scrollBar;
   min-height: 100%;
   transition: margin-left .28s;
-  margin-left: 210px;
+  //margin-left: 210px;
   position: relative;
-
-  &.collapse {
-    margin-left: 64px;
-  }
-
-  &.mobile {
-    margin-left: 0px;
-  }
 }
 
 .app-main {

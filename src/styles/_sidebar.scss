@@ -1,7 +1,62 @@
+// vars
+$menuHover: mix(#fff, #409EFF, 90%) !default;
+
 #app {
+  // reset element-ui menu css
+  .el-menu {
+    border: none;
+    height: 100%;
+    width: 100%;
+
+    // set height ✅
+    .vna-menu-item,
+    .vna-submenu > .el-submenu__title {
+      height: 40px;
+      line-height: 40px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+
+      [class^="el-icon-"] {}
+
+      .el-submenu__icon-arrow {
+        color: inherit !important;
+        font-size: 14px;
+      }
+    }
+
+    // menu active ✅
+    .vna-menu-item.is-active,
+    .vna-submenu.is-active > .el-submenu__title {
+      color: #409EFF !important;
+      background-color: $menuHover !important;
+
+      [class^="el-icon-"] {
+        color: inherit;
+      }
+    }
+
+    // menu hover ✅
+    .vna-menu-item,
+    .vna-submenu > .el-submenu__title {
+      &:hover {
+        background-color: $menuHover !important;
+      }
+    }
+  }
+
+  // when menu collapsed
+  .vna-submenu-popper.el-menu--vertical {
+    // the scroll bar appears when the subMenu is too long
+    > .el-menu--popup {
+      padding: 0 !important;
+      max-height: 100vh;
+      //overflow-y: auto;
+
+      //@include scrollBar;
+    }
+  }
 
   .withoutAnimation {
-
     .major-container,
     .sidebar-container {
       transition: none;

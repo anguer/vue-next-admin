@@ -3,9 +3,7 @@
 </template>
 
 <script>
-export default {
-name: 'index'
-};
+export default {};
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
