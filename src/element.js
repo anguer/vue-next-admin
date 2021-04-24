@@ -94,6 +94,8 @@ import {
 } from 'element-plus';
 
 export default function (app) {
+  app.config.globalProperties.$ELEMENT = { size: 'small' };
+
   const components = [
     ElAffix,
     ElAlert,
@@ -191,4 +193,4 @@ export default function (app) {
   plugins.forEach(plugin => {
     app.use(plugin);
   });
-};
+}

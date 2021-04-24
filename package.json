@@ -10,10 +10,13 @@
     "lint": "eslint \"{src,mock}/**/*.{vue,ts,tsx}\" --fix"
   },
   "dependencies": {
+    "ant-design-vue": "^2.1.2",
     "axios": "^0.21.1",
+    "clone-deep": "^4.0.1",
     "core-js": "^3.10.1",
     "element-plus": "^1.0.2-beta.40",
     "normalize.css": "^8.0.1",
+    "uuid": "^8.3.2",
     "vue": "^3.0.5",
     "vue-router": "^4.0.4",
     "vuex": "^4.0.0"

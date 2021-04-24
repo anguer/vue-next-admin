@@ -37,3 +37,6 @@ html, body {
   outline: none;
 }
 
+.el-link +.el-link {
+  margin-left: 5px;
+}

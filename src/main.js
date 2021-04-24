@@ -16,4 +16,7 @@ const app = createApp(App);
 import element from './element';
 element(app);
 
+// import antd from './antd';
+// antd(app);
+
 app.use(router).use(store).mount('#app');

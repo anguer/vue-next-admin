@@ -76,5 +76,31 @@
         "icon": "el-icon-s-home"
       }
     ]
+  },
+  {
+    "hidden": false,
+    "alwaysShow": false,
+    "url": "/system",
+    "path": "",
+    "title": "系统管理",
+    "icon": "el-icon-set-up",
+    "children": [
+      {
+        "hidden": false,
+        "alwaysShow": true,
+        "url": "privilege",
+        "path": "/system/privilege",
+        "title": "权限管理",
+        "icon": "el-icon-lock"
+      },
+      {
+        "hidden": false,
+        "alwaysShow": true,
+        "url": "role",
+        "path": "/system/role",
+        "title": "角色管理",
+        "icon": "el-icon-key"
+      }
+    ]
   }
 ]
