@@ -3,7 +3,7 @@
     "hidden": true,
     "alwaysShow": false,
     "url": "/login",
-    "path": "/login/index",
+    "path": "login/index",
     "title": "Login",
     "icon": "el-icon-s-home"
   },
@@ -19,7 +19,7 @@
         "hidden": false,
         "alwaysShow": true,
         "url": "",
-        "path": "/index",
+        "path": "index",
         "title": "Dashboard",
         "icon": "el-icon-s-home"
       }
@@ -37,7 +37,7 @@
         "hidden": false,
         "alwaysShow": false,
         "url": "select",
-        "path": "/form/select",
+        "path": "form/select",
         "title": "菜单一",
         "icon": "el-icon-s-home"
       },
@@ -45,7 +45,7 @@
         "hidden": false,
         "alwaysShow": false,
         "url": "table",
-        "path": "/form/table",
+        "path": "form/table",
         "title": "菜单二",
         "icon": "el-icon-s-home",
         "children": [
@@ -53,7 +53,7 @@
             "hidden": false,
             "alwaysShow": false,
             "url": "table",
-            "path": "/form/table",
+            "path": "form/table",
             "title": "菜单二杠一",
             "icon": "el-icon-s-home"
           },
@@ -61,7 +61,7 @@
             "hidden": false,
             "alwaysShow": false,
             "url": "input",
-            "path": "/form/input",
+            "path": "form/input",
             "title": "菜单二杠二",
             "icon": "el-icon-s-home"
           }
@@ -71,7 +71,7 @@
         "hidden": false,
         "alwaysShow": false,
         "url": "input",
-        "path": "/form/input",
+        "path": "form/input",
         "title": "菜单三",
         "icon": "el-icon-s-home"
       }
@@ -89,7 +89,7 @@
         "hidden": false,
         "alwaysShow": true,
         "url": "privilege",
-        "path": "/system/privilege",
+        "path": "system/privilege",
         "title": "权限管理",
         "icon": "el-icon-lock"
       },
@@ -97,7 +97,7 @@
         "hidden": false,
         "alwaysShow": true,
         "url": "role",
-        "path": "/system/role",
+        "path": "system/role",
         "title": "角色管理",
         "icon": "el-icon-key"
       }

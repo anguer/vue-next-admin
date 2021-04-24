@@ -4,7 +4,8 @@
  * @date Create by 2021-04-18
  */
 import http from '@/helper/http';
-import { getStorage, setStorage, TokenKey } from "@/helper/storage";
+import { getStorage, setStorage, TokenKey, PrivilegeKey } from '@/helper/storage';
+import { toJson } from '@/helper';
 
 export default {
   state: {
@@ -23,6 +24,12 @@ export default {
       // const token = await http.get('/api/login', { tel });
       // setStorage(TokenKey, token);
       // commit('SET_TOKEN', token);
+    },
+
+    GetUserInfo ({ commit, dispatch }) {
+      return Promise.resolve({
+        routes: toJson(getStorage(PrivilegeKey), [])
+      });
     }
   }
 };

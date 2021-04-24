@@ -30,6 +30,30 @@ export function arrayToTree (source = [], id = 'id', parentId = 'parentId', chil
   });
 }
 
+export function filesToTree (files = []) {
+  function addPath (arr, obj = {}) {
+    const component = arr.shift();
+    const current = obj[component] || (obj[component] = { label: component });
+    if (arr.length) {
+      addPath(arr, current.children || (current.children = {}));
+    }
+    return obj;
+  }
+
+  function makeArray (obj) {
+    const arr = Object.values(obj);
+    arr.filter(item => item.children).forEach(item => {
+      item.children = makeArray(item.children);
+    });
+    return arr;
+  }
+
+  // make tree
+  const treeObj = files.reduce((obj, path) => addPath(path.split('/'), obj), {});
+
+  return makeArray(treeObj);
+}
+
 export function toJson (str, def = null) {
   try {
     return JSON.parse(str) || def;

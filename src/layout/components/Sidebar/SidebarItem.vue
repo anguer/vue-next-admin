@@ -36,6 +36,7 @@
 </template>
 
 <script>
+import { ref } from 'vue';
 import { resolve } from '@/helper/path';
 import { isExternal } from '@/helper';
 import Item from './Item.vue';
@@ -59,19 +60,17 @@ export default {
       default: ''
     }
   },
-  data () {
-    return {
-      onlyOneChild: null
-    };
-  },
-  methods: {
-    hasOneShowingChild (children, parent) {
+
+  setup (props) {
+    const onlyOneChild = ref(null);
+
+    const hasOneShowingChild = (children, parent) => {
       const showingChildren = children.filter(item => {
         if (item.hidden) {
           return false;
         } else {
           // Temp set(will be used if only has one showing child)
-          this.onlyOneChild = item;
+          onlyOneChild.value = item;
           return true;
         }
       });
@@ -83,22 +82,25 @@ export default {
 
       // Show parent if there are no child router to display
       if (showingChildren.length === 0) {
-        this.onlyOneChild = { ...parent, path: '', noShowingChildren: true };
+        onlyOneChild.value = { ...parent, path: '', noShowingChildren: true };
         return true;
       }
 
       return false;
-    },
-    resolvePath (routePath) {
-      // return routePath;
-      if (this.isExternalLink(routePath)) {
+    };
+
+    const resolvePath = (routePath) => {
+      if (isExternal(routePath)) {
         return routePath;
       }
-      return resolve(this.basePath, routePath);
-    },
-    isExternalLink (routePath) {
-      return isExternal(routePath);
-    },
-  }
+      return resolve(props.basePath, routePath);
+    };
+
+    return {
+      onlyOneChild,
+      hasOneShowingChild,
+      resolvePath,
+    };
+  },
 };
 </script>

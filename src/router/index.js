@@ -10,6 +10,9 @@ import routes from './routes.json';
 import Layout from '@/layout/index.vue';
 const modules = import.meta.glob('../views/**/*.vue');
 
+// vue view modules
+export const viewModules = Object.keys(modules).map(path => path.replace('../views/', ''));
+
 // menu tree to route tree
 export const translate = (arr = [], isRoot = true) => arr.map(t => {
   const obj = {
@@ -17,7 +20,7 @@ export const translate = (arr = [], isRoot = true) => arr.map(t => {
     name: Symbol.for(t.title + Math.random()),
     path: t.url,
     // component: (t.path && typeof t.path === 'string') ? () => import(`../views${t.path}.vue`) : Layout,
-    component: (t.path && typeof t.path === 'string') ? modules[`../views${t.path}.vue`] : Layout,
+    component: (t.path && typeof t.path === 'string') ? modules[`../views/${t.path}.vue`] : Layout,
     meta: {
       title: t.title,
       icon: t.icon,

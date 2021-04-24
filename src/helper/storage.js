@@ -4,15 +4,16 @@
  * @date Create by 2021-04-18
  */
 export const TokenKey = 'X-Token';
+export const PrivilegeKey = '__VNA_PRIVILEGE__';
 
 export function getStorage (key) {
-  return sessionStorage.getItem(key);
+  return localStorage.getItem(key);
 }
 
 export function setStorage (key, token) {
-  return sessionStorage.setItem(key, token);
+  return localStorage.setItem(key, token);
 }
 
 export function removeToken (key) {
-  return sessionStorage.removeItem(key);
+  return localStorage.removeItem(key);
 }
