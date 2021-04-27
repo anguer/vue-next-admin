@@ -18,7 +18,7 @@ export default {
       // const NotFoundPage = { path: '*', redirect: '/404', hidden: true };
       const tree = arrayToTree(data);
       const asyncRoutes = translate(tree);
-      console.log('#GenerateRoutes', asyncRoutes);
+      // console.log('#GenerateRoutes', asyncRoutes);
       commit('SET_ROUTES', asyncRoutes);
       // return asyncRoutes;
     },

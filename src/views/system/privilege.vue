@@ -4,15 +4,11 @@
       <el-form ref="form" :model="formState" :rules="rules" label-position="left" label-width="auto" label-suffix=":">
         <el-form-item label="" prop="type">
           <el-radio-group v-model="formState.type">
-            <el-radio-button :label="1">
-              目录
-            </el-radio-button>
-            <el-radio-button :label="2">
-              菜单
-            </el-radio-button>
-            <el-radio-button :label="3">
-              按钮
-            </el-radio-button>
+            <template v-for="item in PRIVILEGE.flatValues" :key="item.key">
+              <el-radio-button :label="item.value">
+                {{ item.label }}
+              </el-radio-button>
+            </template>
           </el-radio-group>
         </el-form-item>
         <el-form-item key="parentId" label="上级目录" prop="parentId">
@@ -74,6 +70,7 @@ import { toJson, arrayToTree, filesToTree } from '@/helper';
 import { v4 as uuidv4 } from 'uuid';
 import { getStorage, setStorage, PrivilegeKey } from '@/helper/storage';
 import { viewModules } from '@/router';
+import { PRIVILEGE } from '@/enum';
 
 const defaultSchema = () => {
   return {
@@ -133,7 +130,7 @@ export default {
     const treeData = computed(() => arrayToTree(data?.value));
     // console.log('#catalogs', catalogs);
     const files = ref(filesToTree(viewModules));
-    console.log('#files', filesToTree(viewModules));
+    // console.log('#files', filesToTree(viewModules));
 
     const handleReset = () => {
       form?.value?.resetFields();
@@ -171,6 +168,8 @@ export default {
       treeData,
       catalogs,
       files,
+
+      PRIVILEGE,
 
       handleReset,
       handleSubmit,

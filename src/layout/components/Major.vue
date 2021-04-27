@@ -1,10 +1,10 @@
 <template>
-  <div class="major-container" :class="{ collapse, mobile }">
+  <el-scrollbar class="major-container" :class="{ collapse, mobile }">
     <el-affix position="top" :offset="0"><slot name="navbar" /></el-affix>
-    <el-scrollbar class="app-main">
+    <div class="app-main">
       <router-view />
-    </el-scrollbar>
-  </div>
+    </div>
+  </el-scrollbar>
 </template>
 
 <script>
