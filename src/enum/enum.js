@@ -31,7 +31,9 @@ function mapKey (object, iteratee) {
 /**
  * @class Enum
  *
- * new Enum({key: value, key2: value, key3: value, ...});
+ * new Enum({key1: [value, label], key2: [value, label], key3: [value, label], ...});
+ * new Enum([{key1, value, label}, {key2, value, label}, {key3, value, label}, ...]);
+ * new Enum({key1, value, label}, {key2, value, label}, {key3, value, label}, ...);
  */
 export default class Enum {
   static fromItem (key, args) {
@@ -40,7 +42,7 @@ export default class Enum {
     }
 
     const item = {};
-    item.key = key;
+    item.key = args.key || key;
 
     if (args instanceof Enum) {
       item.value = args;
@@ -62,29 +64,34 @@ export default class Enum {
     return item instanceof Enum || item?.value instanceof Enum;
   }
 
-  constructor (args = []) {
-    if (typeof args !== 'object') {
+  constructor (...args) {
+    const _args = args.length > 1 ? [...args] : args[0];
+    if (typeof _args !== 'object' || !Object.keys(_args).length) {
       throw new Error('args must be an array or object');
     }
 
+    // => ['key1', 'key2', 'key3', ...]
     Object.defineProperty(this, '__rawKeys__', {
       writable: false,
       enumerable: false,
-      value: Object.freeze(Object.keys(args))
+      value: Object.freeze(Object.keys(mapKey(_args, (value, key) => value.key || key)))
     });
 
+    // => [{key1, value, label}, {key2, value, label}, {key3, value, label}, ...]
     Object.defineProperty(this, '__rawArgs__', {
       writable: false,
       enumerable: false,
-      value: Object.freeze(mapValue(args, (value, key) => Enum.fromItem(key, value)))
+      value: Object.freeze(mapValue(_args, (value, key) => Enum.fromItem(key, value)))
     });
 
+    // => {value1: {key1, value, label}, value2: {key1, value, label}, value3: {key1, value, label}, ...}
     Object.defineProperty(this, '__valueBy__', {
       writable: false,
       enumerable: false,
       value: Object.freeze(mapKey(this.flatValues, o => o.value))
     });
 
+    // proxy property in raw keys
     return new Proxy(this, {
       get (target, property) {
         if (target.__rawKeys__.includes(property)) {
@@ -96,10 +103,12 @@ export default class Enum {
     });
   }
 
+  // top layer values
   get values () {
     return Object.values(this.__rawArgs__);
   }
 
+  // nest values to flat values
   get flatValues () {
     function iteratee (t) {
       if (Enum.isEnum(t)) {
@@ -111,6 +120,7 @@ export default class Enum {
     return this.values.map(iteratee).flat();
   }
 
+  // value to label
   label (value) {
     return this.__valueBy__[value]?.label;
   }
