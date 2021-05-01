@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :span="6">
-      <el-form ref="form" :model="formState" :rules="rules" label-position="left" label-width="auto" label-suffix=":">
+      <el-form ref="form" :model="formState" :rules="rules" label-position="right" label-width="100px" label-suffix=":">
         <el-form-item label="" prop="type">
           <el-radio-group v-model="formState.type">
             <template v-for="item in PRIVILEGE.flatValues" :key="item.key">
@@ -20,16 +20,21 @@
         <el-form-item key="icon" label="图标" prop="icon">
           <el-input v-model="formState.icon" />
         </el-form-item>
-        <el-form-item key="url" label="路由地址" prop="url">
-          <el-input v-model="formState.url" />
-        </el-form-item>
-        <el-form-item key="path" label="文件地址" prop="path">
-<!--          <el-input v-model="formState.path" />-->
-          <el-cascader v-model="formState.path" :options="files" :props="{ emitPath: false, label: 'label', value: 'label' }" />
-        </el-form-item>
-        <el-form-item key="hidden" label="是否隐藏" prop="hidden">
-          <el-checkbox v-model="formState.hidden" />
-        </el-form-item>
+        <template v-if="formState.type !== PRIVILEGE.BUTTON.value">
+          <el-form-item key="url" label="路由地址" prop="url">
+            <el-input v-model="formState.url" />
+          </el-form-item>
+        </template>
+        <template v-if="formState.type === PRIVILEGE.MENU.value">
+          <el-form-item key="path" label="文件地址" prop="path">
+            <el-cascader v-model="formState.path" :options="files" :props="{ emitPath: false, label: 'label', value: 'label' }" />
+          </el-form-item>
+        </template>
+        <template v-if="formState.type !== PRIVILEGE.BUTTON.value">
+          <el-form-item key="hidden" label="是否隐藏" prop="hidden">
+            <el-checkbox v-model="formState.hidden" />
+          </el-form-item>
+        </template>
         <el-form-item key="footer">
           <el-button @click="handleReset">
             重置
@@ -126,7 +131,10 @@ export default {
       }
     });
 
-    const catalogs = computed(() => [{ title: '~Root', id: 0 }, ...arrayToTree(data?.value)]);
+    const catalogs = computed(() => [
+      { title: '~Root', id: 0 },
+      ...arrayToTree(data?.value.filter(t => t.type !== PRIVILEGE.BUTTON.value && (t.type <= formState.type)))
+    ]);
     const treeData = computed(() => arrayToTree(data?.value));
     // console.log('#catalogs', catalogs);
     const files = ref(filesToTree(viewModules));
