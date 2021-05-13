@@ -1,4 +1,5 @@
 import Vue from '@vitejs/plugin-vue';
+import VueJsx from '@vitejs/plugin-vue-jsx';
 import styleImport from 'vite-plugin-style-import';
 
 import path from 'path';
@@ -21,6 +22,7 @@ export default ({ command, mode }) => {
     root,
     plugins: [
       Vue(),
+      VueJsx(),
 
       styleImport({
         libs: [
@@ -69,6 +71,11 @@ export default ({ command, mode }) => {
       assetsDir: 'static',
       brotliSize: false,
       chunkSizeWarningLimit: 1500,
+    },
+
+    esbuild: {
+      jsxFactory: 'h',
+      jsxFragment: 'Fragment'
     }
   };
 };

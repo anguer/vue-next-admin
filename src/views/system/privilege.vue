@@ -44,6 +44,8 @@
           </el-button>
         </el-form-item>
       </el-form>
+
+      <vn-form></vn-form>
     </el-col>
     <el-col :span="18">
       <el-table :data="treeData" row-key="id">
@@ -76,6 +78,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { getStorage, setStorage, PrivilegeKey } from '@/helper/storage';
 import { viewModules } from '@/router';
 import { PRIVILEGE } from '@/enum';
+import { VnForm } from '@/components/Form';
 
 const defaultSchema = () => {
   return {
@@ -91,6 +94,7 @@ const defaultSchema = () => {
 };
 
 export default {
+  components: { VnForm },
   setup () {
     const form = ref(null);
 
