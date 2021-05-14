@@ -45,7 +45,11 @@
         </el-form-item>
       </el-form>
 
-      <vn-form></vn-form>
+      <vn-form>
+<!--        <template #order="{ model, field }">-->
+<!--          <el-input v-model:value="model[field]" placeholder="asd" />-->
+<!--        </template>-->
+      </vn-form>
     </el-col>
     <el-col :span="18">
       <el-table :data="treeData" row-key="id">

@@ -6,6 +6,7 @@
 // 如果要使用.scss样式文件，则需要引入base.scss文件
 // import 'element-plus/packages/theme-chalk/src/base.scss';
 import 'element-plus/lib/theme-chalk/index.css';
+import zhElement from 'element-plus/lib/locale/lang/zh-cn';
 
 import {
   ElAffix,
@@ -92,10 +93,13 @@ import {
   ElMessage,
   ElMessageBox,
   ElNotification,
+
+  locale,
 } from 'element-plus';
 
 export default function (app) {
   app.config.globalProperties.$ELEMENT = { size: 'small' };
+  locale(zhElement);
 
   const components = [
     ElAffix,

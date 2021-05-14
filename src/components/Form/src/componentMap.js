@@ -3,13 +3,21 @@
  */
 import {
   ElInput,
-  ElSelect,
+  // ElSelect,
 } from 'element-plus';
+
+import { RadioButtonGroup } from '@/components/RadioButtonGroup';
+import { CheckBoxGroup } from '@/components/CheckBoxGroup';
+import { Select } from '@/components/Select';
 
 const componentMap = new Map();
 
 componentMap.set('Input', ElInput);
 
-componentMap.set('Select', ElSelect);
+// componentMap.set('Select', ElSelect);
+
+componentMap.set('RadioButtonGroup', RadioButtonGroup);
+componentMap.set('CheckBoxGroup', CheckBoxGroup);
+componentMap.set('Select', Select);
 
 export { componentMap };

@@ -1,7 +1,9 @@
 /**
  * @author yangyue
  */
-// function isButton () {}
+function isButton (type) {
+  return type === '2';
+}
 // function isMenu () {}
 // function isDir () {}
 
@@ -23,11 +25,25 @@ export const formSchema = [
   {
     field: 'menuName',
     label: '菜单名称',
+    placeholder: '菜单名称',
     defaultValue: '',
     component: 'Input',
     required: true,
   },
 
+  {
+    field: 'parentMenu',
+    label: '上级菜单',
+    component: 'Select',
+    componentProps: {
+      options: [
+        { label: '一级菜单', value: '0' },
+        { label: '二级菜单', value: '1' },
+        { label: '三级菜单', value: '2' },
+      ],
+    },
+    rules: [{ required: true, message: '必填项', trigger: 'change' }],
+  },
   // {
   //   field: 'parentMenu',
   //   label: '上级菜单',
@@ -45,8 +61,9 @@ export const formSchema = [
   // {
   //   field: 'orderNo',
   //   label: '排序',
-  //   component: 'InputNumber',
-  //   required: true,
+  //   slot: 'order',
+  //   defaultValue: 'hello',
+  //   rules: [{ required: true, message: '必填项', trigger: 'change' }],
   // },
   // {
   //   field: 'icon',
@@ -56,13 +73,13 @@ export const formSchema = [
   //   show: ({ values }) => !isButton(values.type),
   // },
   //
-  // {
-  //   field: 'routePath',
-  //   label: '路由地址',
-  //   component: 'Input',
-  //   required: true,
-  //   show: ({ values }) => !isButton(values.type),
-  // },
+  {
+    field: 'routePath',
+    label: '路由地址',
+    component: 'Input',
+    required: true,
+    show: ({ values }) => !isButton(values.type),
+  },
   // {
   //   field: 'component',
   //   label: '组件路径',
