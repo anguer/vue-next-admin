@@ -1,12 +1,12 @@
 <template>
-  <el-form ref="formEl" :model="formModel" label-position="top">
+  <el-form v-bind="{ ...$attrs, ...$props }" ref="formEl" class="vna-form" :model="formModel" label-position="top">
     <el-row :gutter="20">
       <template v-for="schema in schemas" :key="schema.field">
         <vn-form-item
-          v-model:value="formModel[schema.field]"
           :schema="schema"
           :form-props="getProps"
           :form-model="formModel"
+          :set-form-model="setFormModel"
         >
           <template v-for="item in Object.keys($slots)" #[item]="data">
             <slot :name="item" v-bind="data"></slot>
@@ -16,6 +16,7 @@
 
       <el-col :span="24">
         <el-form-item>
+          <el-button @click="handleReset">重置</el-button>
           <el-button type="primary" @click="handleSubmit">提交</el-button>
         </el-form-item>
       </el-col>
@@ -58,16 +59,40 @@ export default defineComponent({
   },
   data () {
     return {
-      formModel: initFormModal(this.schemas)
+      formModel: {}
     };
   },
   computed: {
     getProps () {
       return { ...this.$props };
+    },
+
+    getSchemas () {
+      return [...this.schemas];
+    }
+  },
+
+  watch: {
+    getSchemas: {
+      handler (schemas) {
+        if (schemas?.length) {
+          this.formModel = initFormModal(schemas);
+        }
+      },
+      immediate: true
     }
   },
 
   methods: {
+    setFormModel (key, value) {
+      // console.log('#setFormModel', key, value);
+      this.formModel[key] = value;
+    },
+
+    handleReset () {
+      this.$refs.formEl?.resetFields();
+    },
+
     handleSubmit () {
       console.log('#handleSubmit', this.formModel, this.$refs.formEl);
 
@@ -87,6 +112,10 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.vna-form.el-form--label-top {
+  ::v-deep(.el-form-item__label) {
+    padding-bottom: 0;
+  }
+}
 </style>

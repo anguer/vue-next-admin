@@ -1,8 +1,10 @@
 /**
  * @author yangyue
  */
+import { PRIVILEGE } from '@/enum';
+
 function isButton (type) {
-  return type === '2';
+  return type === PRIVILEGE.BUTTON.value;
 }
 // function isMenu () {}
 // function isDir () {}
@@ -12,13 +14,9 @@ export const formSchema = [
     field: 'type',
     label: '菜单类型',
     component: 'RadioButtonGroup',
-    defaultValue: '0',
+    defaultValue: PRIVILEGE.DIRECTORY.value,
     componentProps: {
-      options: [
-        { label: '目录', value: '0' },
-        { label: '菜单', value: '1' },
-        { label: '按钮', value: '2' },
-      ],
+      options: PRIVILEGE.flatValues,
     },
     colProps: { lg: 24, md: 24 },
   },
@@ -27,7 +25,16 @@ export const formSchema = [
     label: '菜单名称',
     placeholder: '菜单名称',
     defaultValue: '',
+    helpMessage: '这是一个文本提示',
     component: 'Input',
+    componentProps: {
+      prefixIcon: 'el-icon-menu'
+    },
+    componentSlot: () => {
+      return {
+        suffix: () => 'suffix',
+      };
+    },
     required: true,
   },
 
@@ -58,13 +65,13 @@ export const formSchema = [
   //   },
   // },
   //
-  // {
-  //   field: 'orderNo',
-  //   label: '排序',
-  //   slot: 'order',
-  //   defaultValue: 'hello',
-  //   rules: [{ required: true, message: '必填项', trigger: 'change' }],
-  // },
+  {
+    field: 'orderNo',
+    label: '排序',
+    slot: 'order',
+    defaultValue: '',
+    rules: [{ required: true, message: '必填项', trigger: 'change' }],
+  },
   // {
   //   field: 'icon',
   //   label: '图标',
@@ -76,8 +83,9 @@ export const formSchema = [
   {
     field: 'routePath',
     label: '路由地址',
+    subLabel: '(可选)',
     component: 'Input',
-    required: true,
+    // required: true,
     show: ({ values }) => !isButton(values.type),
   },
   // {

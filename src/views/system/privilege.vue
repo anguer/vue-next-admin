@@ -46,9 +46,13 @@
       </el-form>
 
       <vn-form>
-<!--        <template #order="{ model, field }">-->
-<!--          <el-input v-model:value="model[field]" placeholder="asd" />-->
-<!--        </template>-->
+        <template #order="{ model, field }">
+          <el-input v-model="model[field]" placeholder="asd" >
+            <template #suffix>
+              <i class="el-icon-menu"></i>
+            </template>
+          </el-input>
+        </template>
       </vn-form>
     </el-col>
     <el-col :span="18">

@@ -1,6 +1,7 @@
 <script lang="jsx">
 import { defineComponent } from 'vue';
 import { componentMap } from './componentMap';
+import { upperFirst } from 'lodash-es';
 
 function getSlot (slots, slot = 'default', data) {
   // console.log('#getSlot', slots, slot, data);
@@ -18,10 +19,6 @@ function getSlot (slots, slot = 'default', data) {
 export default defineComponent({
   name: 'VnFormItem',
   props: {
-    value: {
-      type: [String, Number, Object, Array, Boolean],
-      default: ''
-    },
     schema: {
       type: Object,
       required: true
@@ -34,19 +31,13 @@ export default defineComponent({
       type: Object,
       required: true
     },
+    setFormModel: {
+      type: Function,
+      required: true
+    }
   },
 
-  emits: ['update:value'],
   computed: {
-    inputValue: {
-      get () {
-        return this.value;
-      },
-      set (val) {
-        this.$emit('update:value', val);
-      }
-    },
-
     getValues () {
       const { formModel, schema } = this.$props;
       return {
@@ -81,10 +72,10 @@ export default defineComponent({
         isIfShow = ifShow;
       }
       if (typeof show === 'function') {
-        isShow = show(this.getValues);
+        isShow = show({ ...this.getValues });
       }
       if (typeof ifShow === 'function') {
-        isIfShow = ifShow(this.getValues);
+        isIfShow = ifShow({ ...this.getValues });
       }
 
       return { isShow, isIfShow };
@@ -94,7 +85,7 @@ export default defineComponent({
       const { rules = [], asyncRules } = this.schema;
 
       if (typeof asyncRules === 'function') {
-        return asyncRules(this.getValues);
+        return asyncRules({ ...this.getValues });
       }
 
       return rules;
@@ -102,8 +93,7 @@ export default defineComponent({
   },
 
   render (ctx) {
-    console.log('#render', ctx);
-    const self = this;
+    // console.log('#render', ctx);
     const {
       schema,
       getCompProps,
@@ -111,46 +101,120 @@ export default defineComponent({
       getRules,
       getValues,
       $slots,
+      formModel,
+      setFormModel,
     } = ctx;
     const {
       component,
+      componentSlot,
       field,
-      label,
+      // label,
       required,
       colProps = {},
       placeholder,
+      changeEvent = 'change',
     } = schema;
 
     // 布局属性
     const { baseColProps = {} } = ctx.formProps;
     const realColProps = { ...baseColProps, ...colProps };
 
+    function renderLabelHelpMessage () {
+      const { label, helpMessage, helpComponentProps, subLabel } = schema;
+      const renderLabel = subLabel
+        ? (<span>{label} <span class='text-secondary'>{subLabel}</span></span>)
+        : (label);
+      if (!helpMessage || (Array.isArray(helpMessage) && helpMessage.length === 0)) {
+        return renderLabel;
+      }
+      return (
+        <span>
+          {renderLabel}
+          <el-tooltip placement='top' class='mx-1' content={helpMessage} {...helpComponentProps}>
+            <i class='el-icon-warning el-icon--right' />
+          </el-tooltip>
+        </span>
+      );
+    }
+
     function renderComp () {
-      const attr = {
+      const propsData = {
         placeholder,
         ...getCompProps,
+        field,
+        formValues: getValues,
       };
+
+      const eventKey = `on${upperFirst(changeEvent)}`;
+      const on = {
+        [eventKey]: (e) => {
+          console.log(`#${eventKey}`, e);
+          if (getCompProps[eventKey]) {
+            getCompProps[eventKey](e);
+          }
+
+          const target = e ? e.target : null;
+
+          const value = target ? target.value : e;
+          setFormModel(field, value);
+        },
+        onInput: e => {
+          const target = e ? e.target : null;
+
+          const value = target ? target.value : e;
+          setFormModel(field, value);
+        }
+      };
+
+      const bindValue = {
+        value: formModel[field],
+        modelValue: formModel[field],
+      };
+
+      const compAttr = {
+        ...propsData,
+        ...on,
+        ...bindValue,
+      };
+      // console.log('#compAttr', compAttr, formModel[field]);
 
       const comp = componentMap.get(component);
       if (!comp) {
         console.error('no match component.');
       }
 
-      return (<comp v-model={self.inputValue} { ...attr } />);
+      if (!componentSlot) {
+        return (<comp { ...compAttr } />);
+      }
+
+      const compSlot = typeof componentSlot === 'function'
+        ? { ...componentSlot({ ...getValues }) }
+        : { default: () => componentSlot };
+
+      return (<comp { ...compAttr } >{compSlot}</comp>);
     }
 
     function getContent () {
       const { slot } = schema;
 
-      return slot ? getSlot($slots, slot, getValues) : renderComp();
+      return slot ? getSlot($slots, slot, { ...getValues }) : renderComp();
     }
 
     const { isIfShow, isShow } = getShow;
 
     return isIfShow && (
       <el-col { ...realColProps } v-show={isShow}>
-        <el-form-item label={label} prop={field} key={field} required={required} rules={getRules}>
-          <>{ getContent() }</>
+        <el-form-item
+          // label={label}
+          v-slots={{ label: () => renderLabelHelpMessage() }}
+          prop={field}
+          key={field}
+          required={required}
+          rules={getRules}
+        >
+          <>
+            { getContent() }
+          </>
         </el-form-item>
       </el-col>
     );
