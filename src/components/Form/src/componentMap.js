@@ -3,6 +3,7 @@
  */
 import {
   ElInput,
+  ElInputNumber,
   // ElSelect,
 } from 'element-plus';
 
@@ -13,6 +14,7 @@ import { Select } from '@/components/Select';
 const componentMap = new Map();
 
 componentMap.set('Input', ElInput);
+componentMap.set('InputNumber', ElInputNumber);
 
 // componentMap.set('Select', ElSelect);
 

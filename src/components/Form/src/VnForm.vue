@@ -1,5 +1,5 @@
 <template>
-  <el-form v-bind="{ ...$attrs, ...$props }" ref="formEl" class="vna-form" :model="formModel" label-position="top">
+  <el-form v-bind="{ ...$attrs, ...$props }" ref="rawFormEl" class="vna-form" :model="formModel" label-position="top">
     <el-row :gutter="20">
       <template v-for="schema in schemas" :key="schema.field">
         <vn-form-item
@@ -26,7 +26,6 @@
 
 <script>
 import { defineComponent } from 'vue';
-import { formSchema } from '../data.test';
 import VnFormItem from './VnFormItem.vue';
 
 function initFormModal (schemas = []) {
@@ -48,7 +47,7 @@ export default defineComponent({
   props: {
     schemas: {
       type: Array,
-      default: () => formSchema
+      default: () => []
     },
     baseColProps: {
       type: Object,
@@ -57,9 +56,11 @@ export default defineComponent({
       }
     }
   },
+  emits: ['submit'],
   data () {
     return {
-      formModel: {}
+      formModel: {},
+      defaultValues: {},
     };
   },
   computed: {
@@ -69,6 +70,10 @@ export default defineComponent({
 
     getSchemas () {
       return [...this.schemas];
+    },
+
+    fields () {
+      return this.getSchemas.map(t => t.field).filter(t => !!t);
     }
   },
 
@@ -77,6 +82,7 @@ export default defineComponent({
       handler (schemas) {
         if (schemas?.length) {
           this.formModel = initFormModal(schemas);
+          this.defaultValues = initFormModal(schemas);
         }
       },
       immediate: true
@@ -89,19 +95,31 @@ export default defineComponent({
       this.formModel[key] = value;
     },
 
+    setFieldsValue (record) {
+      this.fields.forEach(field => {
+        this.setFormModel(field, record[field]);
+      });
+    },
+
     handleReset () {
-      this.$refs.formEl?.resetFields();
+      this.fields.forEach(field => {
+        this.setFormModel(field, this.defaultValues[field]);
+      });
+      this.$nextTick(() => {
+        this.$refs.rawFormEl?.clearValidate(this.fields);
+      });
     },
 
     handleSubmit () {
-      console.log('#handleSubmit', this.formModel, this.$refs.formEl);
+      // console.log('#handleSubmit', this.formModel, this.$refs.rawFormEl);
 
-      // this.$refs.formEl?.validateField('menuName', error => {
+      // this.$refs.rawFormEl?.validateField('menuName', error => {
       //   console.log('validateField', error);
       // });
 
-      this.$refs.formEl?.validate((valid) => {
+      this.$refs.rawFormEl?.validate((valid) => {
         if (valid) {
+          this.$emit('submit', { ...this.formModel });
           console.log('success');
         } else {
           console.log('failed');

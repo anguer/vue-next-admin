@@ -1,57 +1,12 @@
 <template>
   <el-row :gutter="20">
     <el-col :span="6">
-      <el-form ref="form" :model="formState" :rules="rules" label-position="right" label-width="100px" label-suffix=":">
-        <el-form-item label="" prop="type">
-          <el-radio-group v-model="formState.type">
-            <template v-for="item in PRIVILEGE.flatValues" :key="item.key">
-              <el-radio-button :label="item.value">
-                {{ item.label }}
-              </el-radio-button>
-            </template>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item key="parentId" label="上级目录" prop="parentId">
-          <el-cascader v-model="formState.parentId" :options="catalogs" :props="{ emitPath: false, label: 'title', value: 'id', checkStrictly: true }" />
-        </el-form-item>
-        <el-form-item key="title" label="标题" prop="title">
-          <el-input v-model="formState.title" />
-        </el-form-item>
-        <el-form-item key="icon" label="图标" prop="icon">
-          <el-input v-model="formState.icon" />
-        </el-form-item>
-        <template v-if="formState.type !== PRIVILEGE.BUTTON.value">
-          <el-form-item key="url" label="路由地址" prop="url">
-            <el-input v-model="formState.url" />
-          </el-form-item>
+      <vn-form ref="vnform" :schemas="schemas" @submit="handleSubmit2">
+        <template #path="{ model, field }">
+          <el-cascader v-model="model[field]" :options="files" :props="{ emitPath: false, label: 'label', value: 'label' }" />
         </template>
-        <template v-if="formState.type === PRIVILEGE.MENU.value">
-          <el-form-item key="path" label="文件地址" prop="path">
-            <el-cascader v-model="formState.path" :options="files" :props="{ emitPath: false, label: 'label', value: 'label' }" />
-          </el-form-item>
-        </template>
-        <template v-if="formState.type !== PRIVILEGE.BUTTON.value">
-          <el-form-item key="hidden" label="是否隐藏" prop="hidden">
-            <el-checkbox v-model="formState.hidden" />
-          </el-form-item>
-        </template>
-        <el-form-item key="footer">
-          <el-button @click="handleReset">
-            重置
-          </el-button>
-          <el-button type="primary" @click="handleSubmit">
-            确定
-          </el-button>
-        </el-form-item>
-      </el-form>
-
-      <vn-form>
-        <template #order="{ model, field }">
-          <el-input v-model="model[field]" placeholder="asd" >
-            <template #suffix>
-              <i class="el-icon-menu"></i>
-            </template>
-          </el-input>
+        <template #parentId="{ model, field }">
+          <el-cascader v-model="model[field]" :options="catalogs" :props="{ emitPath: false, label: 'title', value: 'id', checkStrictly: true }" />
         </template>
       </vn-form>
     </el-col>
@@ -87,6 +42,7 @@ import { getStorage, setStorage, PrivilegeKey } from '@/helper/storage';
 import { viewModules } from '@/router';
 import { PRIVILEGE } from '@/enum';
 import { VnForm } from '@/components/Form';
+import { formSchema } from './privilege.data';
 
 const defaultSchema = () => {
   return {
@@ -172,13 +128,23 @@ export default {
       });
     };
 
-    const handleEdit = row => {
-      console.log('#handleEdit', Object.keys(formState));
-      Object.keys(formState).forEach(k => (formState[k] = row[k]));
-    };
-
     const handleRemove = row => {
       data.value = row?.id;
+    };
+
+    const vnform = ref(null);
+    const schemas = reactive(formSchema);
+
+    const handleSubmit2 = (form) => {
+      console.log('#handleSubmit2', form);
+      data.value = { ...form };
+      // vnform?.value?.reset();
+    };
+
+    const handleEdit = row => {
+      console.log('#handleEdit', Object.keys(formState));
+      // Object.keys(formState).forEach(k => (formState[k] = row[k]));
+      vnform?.value?.setFieldsValue(row);
     };
 
     return {
@@ -195,6 +161,10 @@ export default {
       handleSubmit,
       handleEdit,
       handleRemove,
+
+      vnform,
+      schemas,
+      handleSubmit2,
     };
   },
 };

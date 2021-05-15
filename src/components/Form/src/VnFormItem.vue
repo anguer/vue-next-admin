@@ -82,10 +82,19 @@ export default defineComponent({
     },
 
     getRules () {
-      const { rules = [], asyncRules } = this.schema;
+      const { rules = [], asyncRules, required, field } = this.schema;
+      const { isShow } = this.getShow;
 
       if (typeof asyncRules === 'function') {
         return asyncRules({ ...this.getValues });
+      }
+
+      if (!Array.isArray(rules)) {
+        console.error(`#${field} rules is not an array`);
+      }
+
+      if (!rules.length && required) {
+        rules.unshift({ required: isShow, trigger: 'change' });
       }
 
       return rules;
@@ -109,7 +118,6 @@ export default defineComponent({
       componentSlot,
       field,
       // label,
-      required,
       colProps = {},
       placeholder,
       changeEvent = 'change',
@@ -209,7 +217,6 @@ export default defineComponent({
           v-slots={{ label: () => renderLabelHelpMessage() }}
           prop={field}
           key={field}
-          required={required}
           rules={getRules}
         >
           <>
