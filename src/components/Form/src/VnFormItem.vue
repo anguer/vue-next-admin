@@ -34,10 +34,19 @@ export default defineComponent({
     setFormModel: {
       type: Function,
       required: true
+    },
+    validateField: {
+      type: Function,
+      required: true
     }
   },
 
   computed: {
+    value () {
+      const { formModel, schema } = this.$props;
+      return formModel[schema.field];
+    },
+
     getValues () {
       const { formModel, schema } = this.$props;
       return {
@@ -101,6 +110,15 @@ export default defineComponent({
     },
   },
 
+  watch: {
+    value: {
+      handler (val) {
+        // console.log(`#watch ${this.schema.field} change`, val);
+        this.validateField([this.schema.field]);
+      },
+    }
+  },
+
   render (ctx) {
     // console.log('#render', ctx);
     const {
@@ -156,7 +174,7 @@ export default defineComponent({
       const eventKey = `on${upperFirst(changeEvent)}`;
       const on = {
         [eventKey]: (e) => {
-          console.log(`#${eventKey}`, e);
+          // console.log(`#${eventKey}`, e);
           if (getCompProps[eventKey]) {
             getCompProps[eventKey](e);
           }
@@ -166,6 +184,8 @@ export default defineComponent({
           const value = target ? target.value : e;
           setFormModel(field, value);
         },
+
+        // TODO 待优化 `element input` 组件未处理input事件
         onInput: e => {
           const target = e ? e.target : null;
 

@@ -4,6 +4,7 @@
  * @date Create by 2021-04-18
  */
 import cloneDeep from 'clone-deep';
+import { isEqual, transform, isObject } from 'lodash-es';
 
 export function isExternal (path) {
   return (/^(https?:|mailto:|tel:)/).test(path);
@@ -61,3 +62,23 @@ export function toJson (str, def = null) {
     return def;
   }
 }
+
+/**
+ * Deep diff between two object, using lodash
+ * @param  {Object} object Object compared
+ * @param  {Object} base   Object to compare with
+ * @return {Object}        Return a new object who represent the diff
+ */
+export function difference (object, base) {
+  const a = JSON.parse(JSON.stringify(object));
+  const b = JSON.parse(JSON.stringify(base));
+  function changes (object, base) {
+    return transform(object, (result, value, key) => {
+      if (!isEqual(value, base[key])) {
+        result[key] = (isObject(value) && isObject(base[key])) ? changes(value, base[key]) : value;
+      }
+    });
+  }
+  return changes(a, b);
+}
+

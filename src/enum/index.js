@@ -8,4 +8,4 @@ export const PRIVILEGE = new Enum({
 
 // export const FORM = new Enum({ key: 'Input', value: 1, label: '输入框' }, { value: 2, label: '选择框' });
 
-console.log('#PRIVILEGE', PRIVILEGE);
+// console.log('#PRIVILEGE', PRIVILEGE);

@@ -7,6 +7,7 @@
           :form-props="getProps"
           :form-model="formModel"
           :set-form-model="setFormModel"
+          :validate-field="validateField"
         >
           <template v-for="item in Object.keys($slots)" #[item]="data">
             <slot :name="item" v-bind="data"></slot>
@@ -28,7 +29,7 @@
 import { defineComponent } from 'vue';
 import VnFormItem from './VnFormItem.vue';
 
-function initFormModal (schemas = []) {
+function initFormModel (schemas = []) {
   const model = {};
   schemas.forEach(({ field, defaultValue }) => {
     // if (defaultValue !== null && defaultValue !== undefined) {
@@ -81,12 +82,12 @@ export default defineComponent({
     getSchemas: {
       handler (schemas) {
         if (schemas?.length) {
-          this.formModel = initFormModal(schemas);
-          this.defaultValues = initFormModal(schemas);
+          this.formModel = initFormModel(schemas);
+          this.defaultValues = initFormModel(schemas);
         }
       },
       immediate: true
-    }
+    },
   },
 
   methods: {
@@ -99,6 +100,10 @@ export default defineComponent({
       this.fields.forEach(field => {
         this.setFormModel(field, record[field]);
       });
+    },
+
+    validateField (fields = []) {
+      this.$refs.rawFormEl?.validateField(fields);
     },
 
     handleReset () {
