@@ -6,6 +6,7 @@
 
 <script>
 import { isExternal } from '@/helper';
+import { useRouter, useRoute } from 'vue-router';
 
 export default {
   props: {
@@ -14,12 +15,12 @@ export default {
       required: true
     }
   },
-  methods: {
-    isExternalLink (routePath) {
-      return isExternal(routePath);
-    },
-    linkProps (url) {
-      if (this.isExternalLink(url)) {
+  setup (props) {
+    const router = useRouter();
+    const route = useRoute();
+
+    const linkProps = (url) => {
+      if (isExternal(url)) {
         return {
           is: 'a',
           href: url,
@@ -31,23 +32,29 @@ export default {
         is: 'a',
         to: url
       };
-    },
-    handleClick (e) {
-      if (!this.isExternalLink(this.to)) {
+    };
+
+    const handleClick = (e) => {
+      if (!isExternal(props.to)) {
         e.preventDefault();
-        if (this.$route.path === this.to) {
-          this.$router.push(this.to);
-          // this.$router.push({
+        if (route.path === props.to) {
+          router.push(props.to);
+          // router.push({
           //   path: '/redirect',
           //   query: {
-          //     path: this.to
+          //     path: props.to
           //   }
           // });
         } else {
-          this.$router.push(this.to);
+          router.push(props.to);
         }
       }
-    }
+    };
+
+    return {
+      linkProps,
+      handleClick
+    };
   }
 };
 </script>

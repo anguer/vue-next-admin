@@ -1,5 +1,6 @@
 // import style libraries
-@import 'sidebar';
+@import "sidebar";
+@import "element-ui";
 
 html, body {
   //-webkit-touch-callout: none;
@@ -37,3 +38,6 @@ html, body {
   outline: none;
 }
 
+.el-link +.el-link {
+  margin-left: 10px;
+}

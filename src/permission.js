@@ -5,7 +5,7 @@
  */
 import router from './router';
 import store from './store';
-import { getStorage, TokenKey } from '@/helper/storage'
+import { getStorage, TokenKey } from '@/helper/storage';
 
 // no redirect whitelist
 const whiteList = [
@@ -17,6 +17,10 @@ function checkAlwaysAllowedUrls (urls, path) {
 }
 
 router.beforeEach(async (to, from, next) => {
+  const { routes } = await store.dispatch('GetUserInfo');
+  await store.dispatch('GenerateRoutes', routes);
+  // await store.dispatch('GenerateRoutes', []);
+
   // [[[ determine whether the user has logged in
   // const hasToken = getStorage(TokenKey);
   // if (checkAlwaysAllowedUrls(whiteList, to.path)) {
@@ -34,6 +38,5 @@ router.beforeEach(async (to, from, next) => {
   //   next({ path: '/login'});
   // }
   // ]]]
-  await store.dispatch('GenerateRoutes', []);
   next();
 });

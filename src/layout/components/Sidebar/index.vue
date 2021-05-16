@@ -76,6 +76,16 @@ export default {
     display: flex;
     align-items: center;
   }
+
+  &.el-scrollbar {
+    ::v-deep(.el-scrollbar__wrap) {
+      overflow-x: hidden !important;
+    }
+
+    ::v-deep(.el-scrollbar__bar.is-vertical) {
+      right: 0;
+    }
+  }
 }
 </style>
 

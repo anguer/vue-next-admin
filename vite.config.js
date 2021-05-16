@@ -1,4 +1,5 @@
 import Vue from '@vitejs/plugin-vue';
+import VueJsx from '@vitejs/plugin-vue-jsx';
 import styleImport from 'vite-plugin-style-import';
 
 import path from 'path';
@@ -21,6 +22,7 @@ export default ({ command, mode }) => {
     root,
     plugins: [
       Vue(),
+      VueJsx(),
 
       styleImport({
         libs: [
@@ -28,21 +30,16 @@ export default ({ command, mode }) => {
           //   libraryName: 'element-plus',
           //   esModule: true,
           //   ensureStyleFile: true,
-          //   resolveStyle: (name) => {
-          //     name = name.slice(3)
-          //     return `element-plus/packages/theme-chalk/src/${name}.scss`;
-          //   },
-          //   resolveComponent: (name) => {
-          //     return `element-plus/lib/${name}`;
-          //   },
+          //   resolveStyle: (name) => `element-plus/packages/theme-chalk/src/${name.slice(3)}.scss`,
+          //   resolveComponent: (name) => `element-plus/lib/${name}`,
           // },
-          {
-            libraryName: 'element-plus',
-            esModule: true,
-            ensureStyleFile: true,
-            resolveStyle: (name) => `element-plus/lib/theme-chalk/${name}.css`,
-            resolveComponent: (name) => `element-plus/lib/${name}`,
-          }
+          // {
+          //   libraryName: 'element-plus',
+          //   esModule: true,
+          //   ensureStyleFile: true,
+          //   resolveStyle: (name) => `element-plus/lib/theme-chalk/${name}.css`,
+          //   resolveComponent: (name) => `element-plus/lib/${name}`,
+          // }
         ]
       }),
 
@@ -74,6 +71,11 @@ export default ({ command, mode }) => {
       assetsDir: 'static',
       brotliSize: false,
       chunkSizeWarningLimit: 1500,
+    },
+
+    esbuild: {
+      jsxFactory: 'h',
+      jsxFragment: 'Fragment'
     }
   };
 };

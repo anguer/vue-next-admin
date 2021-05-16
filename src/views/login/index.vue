@@ -22,7 +22,7 @@ export default {
       if (!value) {
         return callback(new Error('用户名不能为空'));
       } else {
-        callback();
+        return callback();
       }
     };
     const validatePass = (rule, value, callback) => {
@@ -51,10 +51,9 @@ export default {
     submitForm (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          alert('submit!');
+          this.$message.success('submit!');
         } else {
           console.log('error submit!!');
-          return false;
         }
       });
     },

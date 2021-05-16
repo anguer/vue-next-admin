@@ -9,15 +9,24 @@ import routes from './routes.json';
 /* Layout */
 import Layout from '@/layout/index.vue';
 const modules = import.meta.glob('../views/**/*.vue');
+// console.log('#moduls', modules);
+
+// vue view modules
+export const viewModules = Object.keys(modules).map(path => path.replace('../views/', ''));
 
 // menu tree to route tree
 export const translate = (arr = [], isRoot = true) => arr.map(t => {
+  const hasPath = t.path && typeof t.path === 'string';
+  const rawPath = hasPath ? t.path.split('.vue')[0] : undefined;
+
+  const rawUrl = isRoot ? ('/' + t.url).replace('//', '/') : ('' + t.url).replace('/', '');
+
   const obj = {
     hidden: t.hidden,
     name: Symbol.for(t.title + Math.random()),
-    path: t.url,
-    // component: (t.path && typeof t.path === 'string') ? () => import(`../views${t.path}.vue`) : Layout,
-    component: (t.path && typeof t.path === 'string') ? modules[`../views${t.path}.vue`] : Layout,
+    path: rawUrl,
+    // component: hasPath ? () => import(`../views/${rawPath}.vue`) : Layout,
+    component: hasPath ? modules[`../views/${rawPath}.vue`] : Layout,
     meta: {
       title: t.title,
       icon: t.icon,
@@ -30,8 +39,8 @@ export const translate = (arr = [], isRoot = true) => arr.map(t => {
   return obj;
 });
 
-// console.log('#routes', translate(routes));
 export const constantRoutes = translate(routes);
+// console.log('#routes', constantRoutes);
 export const asyncRoutes = [];
 export function resetRouter () {}
 

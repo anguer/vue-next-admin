@@ -1,4 +1,5 @@
-import { asyncRoutes, constantRoutes, resetRouter } from '@/router';
+import router, { constantRoutes, translate } from '@/router';
+import { arrayToTree } from '@/helper';
 
 export default {
   state: {
@@ -12,10 +13,17 @@ export default {
     },
   },
   actions: {
-    GenerateRoutes ({ commit }, routes) {
+    GenerateRoutes ({ commit }, data) {
       // 404 page must be placed at the end !!!
       // const NotFoundPage = { path: '*', redirect: '/404', hidden: true };
-      commit('SET_ROUTES', routes);
+      const tree = arrayToTree(data);
+      const asyncRoutes = translate(tree);
+      // console.log('#GenerateRoutes', asyncRoutes);
+      asyncRoutes.forEach((route) => {
+        router.addRoute(route);
+      });
+      commit('SET_ROUTES', asyncRoutes);
+      // return asyncRoutes;
     },
   }
 };
