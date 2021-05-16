@@ -11,6 +11,7 @@ export const formSchema = [
   {
     field: 'type',
     label: '菜单类型',
+    helpMessage: '这是一个文本提示',
     component: 'RadioButtonGroup',
     defaultValue: PRIVILEGE.DIRECTORY.value,
     componentProps: {

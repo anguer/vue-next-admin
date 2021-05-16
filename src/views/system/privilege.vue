@@ -1,12 +1,18 @@
 <template>
   <el-row :gutter="20">
     <el-col :span="6">
-      <vn-form ref="vnform" :schemas="schemas" @submit="handleSubmit2">
-        <template #path="{ model, field }">
-          <el-cascader v-model="model[field]" :options="files" :props="{ emitPath: false, label: 'label', value: 'label' }" />
-        </template>
+      <vn-form ref="form" :schemas="schemas" @submit="handleSubmit">
         <template #parentId="{ model, field }">
           <el-cascader v-model="model[field]" :options="catalogs" :props="{ emitPath: false, label: 'title', value: 'id', checkStrictly: true }" />
+        </template>
+        <template #path="{ model, field }">
+          <el-cascader v-model="model[field]" :options="files" :props="{ emitPath: true, label: 'label', value: 'label' }" />
+        </template>
+
+        <template #footer="{ submit, reset }">
+          <el-button @click="reset">自定义重置</el-button>
+          <el-button type="primary" @click="submit">自定义提交</el-button>
+          <el-button type="primary" @click="visible = true">Dialog</el-button>
         </template>
       </vn-form>
     </el-col>
@@ -32,6 +38,9 @@
       </el-table>
     </el-col>
   </el-row>
+  <vn-dialog v-model="visible">
+    <div>This is aDialog</div>
+  </vn-dialog>
 </template>
 
 <script>
@@ -42,6 +51,7 @@ import { getStorage, setStorage, PrivilegeKey } from '@/helper/storage';
 import { viewModules } from '@/router';
 import { PRIVILEGE } from '@/enum';
 import { VnForm } from '@/components/Form';
+import { VnDialog } from '@/components/Dialog';
 import { formSchema } from './privilege.data';
 
 const defaultSchema = () => {
@@ -58,19 +68,11 @@ const defaultSchema = () => {
 };
 
 export default {
-  components: { VnForm },
+  components: { VnForm, VnDialog },
   setup () {
     const form = ref(null);
 
     const formState = reactive(defaultSchema());
-
-    const rules = reactive({
-      type: [{ required: true, message: '必填字段', trigger: 'change' }],
-      title: [{ required: true, message: '必填字段', trigger: 'change' }],
-      icon: [{ required: true, message: '必填字段', trigger: 'change' }],
-      url: [{ required: true, message: '必填字段', trigger: 'change' }],
-      path: [{ required: true, message: '必填字段', trigger: 'change' }],
-    });
 
     const _data_ = ref(toJson(getStorage(PrivilegeKey), []));
     const data = computed({
@@ -108,63 +110,40 @@ export default {
     const files = ref(filesToTree(viewModules));
     // console.log('#files', filesToTree(viewModules));
 
-    const handleReset = () => {
-      form?.value?.resetFields();
-      const schema = defaultSchema();
-      Object.keys(formState).forEach(k => (formState[k] = schema[k]));
-      console.log('#handleReset', formState);
-    };
-
-    const handleSubmit = () => {
-      console.log('#handleSubmit', formState);
-      form?.value?.validate(valid => {
-        if (valid) {
-          // data?.value?.push({ ...formState });
-          data.value = { ...formState };
-          handleReset();
-        } else {
-          console.log('error submit!!');
-        }
-      });
-    };
-
     const handleRemove = row => {
       data.value = row?.id;
     };
 
-    const vnform = ref(null);
     const schemas = reactive(formSchema);
 
-    const handleSubmit2 = (form) => {
-      console.log('#handleSubmit2', form);
-      data.value = { ...form };
-      // vnform?.value?.reset();
+    const handleSubmit = ({ path = [], ...form }) => {
+      console.log('#handleSubmit', path, form);
+      data.value = { ...form, path: path.join('/') };
+      // form?.value?.reset();
     };
 
-    const handleEdit = row => {
-      console.log('#handleEdit', Object.keys(formState));
-      // Object.keys(formState).forEach(k => (formState[k] = row[k]));
-      vnform?.value?.setFieldsValue(row);
+    const handleEdit = ({ path, ...row }) => {
+      console.log('#handleEdit', row, path);
+      form?.value?.setFieldsValue({ ...row, path: path && path.split('/') });
     };
+
+    const visible = ref(false);
 
     return {
-      form,
-      formState,
-      rules,
       treeData,
       catalogs,
       files,
 
       PRIVILEGE,
 
-      handleReset,
-      handleSubmit,
       handleEdit,
       handleRemove,
 
-      vnform,
+      form,
       schemas,
-      handleSubmit2,
+      handleSubmit,
+
+      visible,
     };
   },
 };

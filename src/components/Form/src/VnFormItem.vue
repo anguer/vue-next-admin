@@ -1,5 +1,6 @@
 <script lang="jsx">
 import { defineComponent } from 'vue';
+import { ElFormItem, ElTooltip } from 'element-plus';
 import { componentMap } from './componentMap';
 import { upperFirst } from 'lodash-es';
 
@@ -48,11 +49,13 @@ export default defineComponent({
     },
 
     getValues () {
-      const { formModel, schema } = this.$props;
+      const { formModel, schema, formProps } = this.$props;
+      const { asyncData } = formProps;
       return {
         field: schema.field,
         model: formModel,
         values: {
+          ...asyncData,
           ...formModel,
         },
         schema,
@@ -127,28 +130,14 @@ export default defineComponent({
       getShow,
       getRules,
       getValues,
-      $slots,
       formModel,
       setFormModel,
     } = ctx;
-    const {
-      component,
-      componentSlot,
-      field,
-      // label,
-      colProps = {},
-      placeholder,
-      changeEvent = 'change',
-    } = schema;
 
-    // 布局属性
-    const { baseColProps = {} } = ctx.formProps;
-    const realColProps = { ...baseColProps, ...colProps };
-
-    function renderLabelHelpMessage () {
+    const renderLabelHelpMessage = () => {
       const { label, helpMessage, helpComponentProps, subLabel } = schema;
       const renderLabel = subLabel
-        ? (<span>{label} <span class='text-secondary'>{subLabel}</span></span>)
+        ? (<span>{label} <span class={'text-secondary'}>{subLabel}</span></span>)
         : (label);
       if (!helpMessage || (Array.isArray(helpMessage) && helpMessage.length === 0)) {
         return renderLabel;
@@ -156,14 +145,15 @@ export default defineComponent({
       return (
         <span>
           {renderLabel}
-          <el-tooltip placement='top' class='mx-1' content={helpMessage} {...helpComponentProps}>
-            <i class='el-icon-warning el-icon--right' />
-          </el-tooltip>
+          <ElTooltip placement={'top'} content={helpMessage} {...helpComponentProps}>
+            <i class={'el-icon-warning el-icon--right'} />
+          </ElTooltip>
         </span>
       );
-    }
+    };
 
-    function renderComp () {
+    const renderComp = () => {
+      const { component, componentSlot, placeholder, changeEvent = 'change', field } = schema;
       const propsData = {
         placeholder,
         ...getCompProps,
@@ -209,6 +199,7 @@ export default defineComponent({
       const comp = componentMap.get(component);
       if (!comp) {
         console.error('no match component.');
+        return (<></>);
       }
 
       if (!componentSlot) {
@@ -220,29 +211,39 @@ export default defineComponent({
         : { default: () => componentSlot };
 
       return (<comp { ...compAttr } >{compSlot}</comp>);
-    }
+    };
 
-    function getContent () {
+    const getContent = () => {
+      const { $slots } = ctx;
       const { slot } = schema;
 
       return slot ? getSlot($slots, slot, { ...getValues }) : renderComp();
-    }
+    };
+
+    const getColProps = () => {
+      const { baseColProps = {} } = ctx.formProps;
+      const { colProps = {} } = schema;
+      return { ...baseColProps, ...colProps };
+    };
+
+    const getItemProps = () => {
+      const { field } = schema;
+      return {
+        prop: field,
+        key: field,
+        rules: getRules
+      };
+    };
 
     const { isIfShow, isShow } = getShow;
 
     return isIfShow && (
-      <el-col { ...realColProps } v-show={isShow}>
-        <el-form-item
-          // label={label}
-          v-slots={{ label: () => renderLabelHelpMessage() }}
-          prop={field}
-          key={field}
-          rules={getRules}
-        >
+      <el-col { ...getColProps() } v-show={isShow}>
+        <ElFormItem { ...getItemProps() } v-slots={{ label: () => renderLabelHelpMessage() }}>
           <>
             { getContent() }
           </>
-        </el-form-item>
+        </ElFormItem>
       </el-col>
     );
   }

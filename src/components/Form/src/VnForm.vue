@@ -16,9 +16,15 @@
       </template>
 
       <el-col :span="24">
+        <el-divider></el-divider>
         <el-form-item>
-          <el-button @click="handleReset">重置</el-button>
-          <el-button type="primary" @click="handleSubmit">提交</el-button>
+          <template v-if="!$slots.footer">
+            <el-button @click="reset">重置</el-button>
+            <el-button type="primary" @click="submit">提交</el-button>
+          </template>
+          <template v-else>
+            <slot name="footer" v-bind="{ submit, reset }" />
+          </template>
         </el-form-item>
       </el-col>
     </el-row>
@@ -27,6 +33,7 @@
 
 <script>
 import { defineComponent } from 'vue';
+import { ElForm, ElFormItem, ElDivider } from 'element-plus';
 import VnFormItem from './VnFormItem.vue';
 
 function initFormModel (schemas = []) {
@@ -44,7 +51,7 @@ function initFormModel (schemas = []) {
 
 export default defineComponent({
   name: 'VnForm',
-  components: { VnFormItem },
+  components: { ElForm, ElFormItem, ElDivider, VnFormItem },
   props: {
     schemas: {
       type: Array,
@@ -75,15 +82,16 @@ export default defineComponent({
 
     fields () {
       return this.getSchemas.map(t => t.field).filter(t => !!t);
-    }
+    },
   },
 
   watch: {
     getSchemas: {
       handler (schemas) {
         if (schemas?.length) {
-          this.formModel = initFormModel(schemas);
-          this.defaultValues = initFormModel(schemas);
+          const model = initFormModel(schemas);
+          this.formModel = model;
+          this.defaultValues = { ...model };
         }
       },
       immediate: true
@@ -106,7 +114,7 @@ export default defineComponent({
       this.$refs.rawFormEl?.validateField(fields);
     },
 
-    handleReset () {
+    reset () {
       this.fields.forEach(field => {
         this.setFormModel(field, this.defaultValues[field]);
       });
@@ -115,8 +123,8 @@ export default defineComponent({
       });
     },
 
-    handleSubmit () {
-      // console.log('#handleSubmit', this.formModel, this.$refs.rawFormEl);
+    submit () {
+      // console.log('#submit', this.formModel, this.$refs.rawFormEl);
 
       // this.$refs.rawFormEl?.validateField('menuName', error => {
       //   console.log('validateField', error);
