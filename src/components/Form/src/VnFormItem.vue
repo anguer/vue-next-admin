@@ -119,6 +119,15 @@ export default defineComponent({
         // console.log(`#watch ${this.schema.field} change`, val);
         this.validateField([this.schema.field]);
       },
+    },
+
+    getShow: {
+      handler ({ isShow, isIfShow }) {
+        // console.log(`#watch ${this.schema.field} getShow`, isShow, isIfShow);
+        if (!(isShow && isIfShow)) {
+          this.setFormModel(this.schema.field, this.schema.defaultValue);
+        }
+      }
     }
   },
 

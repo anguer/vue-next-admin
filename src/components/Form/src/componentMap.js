@@ -4,6 +4,7 @@
 import {
   ElInput,
   ElInputNumber,
+  ElCascader,
   // ElSelect,
 } from 'element-plus';
 
@@ -15,6 +16,8 @@ const componentMap = new Map();
 
 componentMap.set('Input', ElInput);
 componentMap.set('InputNumber', ElInputNumber);
+
+componentMap.set('Cascader', ElCascader);
 
 // componentMap.set('Select', ElSelect);
 

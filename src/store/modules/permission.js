@@ -1,4 +1,4 @@
-import { constantRoutes, translate } from '@/router';
+import router, { constantRoutes, translate } from '@/router';
 import { arrayToTree } from '@/helper';
 
 export default {
@@ -19,6 +19,9 @@ export default {
       const tree = arrayToTree(data);
       const asyncRoutes = translate(tree);
       // console.log('#GenerateRoutes', asyncRoutes);
+      asyncRoutes.forEach((route) => {
+        router.addRoute(route);
+      });
       commit('SET_ROUTES', asyncRoutes);
       // return asyncRoutes;
     },

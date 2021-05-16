@@ -1,7 +1,7 @@
 <template>
   <el-row :gutter="20">
     <el-col :span="6">
-      <vn-form ref="form" :schemas="schemas" @submit="handleSubmit">
+      <vn-form ref="form" :schemas="schemas" :async-data="asyncData" @submit="handleSubmit">
         <template #parentId="{ model, field }">
           <el-cascader v-model="model[field]" :options="catalogs" :props="{ emitPath: false, label: 'title', value: 'id', checkStrictly: true }" />
         </template>
@@ -21,7 +21,7 @@
         <el-table-column label="标题" prop="title" />
         <el-table-column label="图标" prop="icon" />
         <el-table-column label="路由地址" prop="url" />
-        <el-table-column label="文件地址" prop="path" />
+        <el-table-column label="组件路径" prop="path" />
         <el-table-column label="是否隐藏" prop="hidden" />
         <el-table-column fixed="right" label="操作" width="100">
           <template #default="{row}">
@@ -54,25 +54,10 @@ import { VnForm } from '@/components/Form';
 import { VnDialog } from '@/components/Dialog';
 import { formSchema } from './privilege.data';
 
-const defaultSchema = () => {
-  return {
-    id: null,
-    parentId: 0,
-    type: 1,
-    title: '',
-    icon: '',
-    url: '',
-    path: '',
-    hidden: false,
-  };
-};
-
 export default {
   components: { VnForm, VnDialog },
   setup () {
     const form = ref(null);
-
-    const formState = reactive(defaultSchema());
 
     const _data_ = ref(toJson(getStorage(PrivilegeKey), []));
     const data = computed({
@@ -103,12 +88,16 @@ export default {
 
     const catalogs = computed(() => [
       { title: '~Root', id: 0 },
-      ...arrayToTree(data?.value.filter(t => t.type !== PRIVILEGE.BUTTON.value && (t.type <= formState.type)))
+      ...arrayToTree(data?.value.filter(t => t.type !== PRIVILEGE.BUTTON.value && (t.type <= form.value?.values.type)))
     ]);
     const treeData = computed(() => arrayToTree(data?.value));
     // console.log('#catalogs', catalogs);
     const files = ref(filesToTree(viewModules));
     // console.log('#files', filesToTree(viewModules));
+
+    const asyncData = computed(() => {
+      return { data };
+    });
 
     const handleRemove = row => {
       data.value = row?.id;
@@ -144,6 +133,7 @@ export default {
       handleSubmit,
 
       visible,
+      asyncData,
     };
   },
 };

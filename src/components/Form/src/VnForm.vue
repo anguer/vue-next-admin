@@ -1,7 +1,7 @@
 <template>
   <el-form v-bind="{ ...$attrs, ...$props }" ref="rawFormEl" class="vna-form" :model="formModel" label-position="top">
     <el-row :gutter="20">
-      <template v-for="schema in schemas" :key="schema.field">
+      <template v-for="schema in getSchemas" :key="schema.field">
         <vn-form-item
           :schema="schema"
           :form-props="getProps"
@@ -49,6 +49,27 @@ function initFormModel (schemas = []) {
   return model;
 }
 
+const defaultSchema = {
+  field: undefined,
+  label: undefined,
+  subLabel: undefined,
+  changeEvent: undefined,
+  defaultValue: undefined,
+  placeholder: undefined,
+  slot: undefined,
+  colProps: undefined,
+  component: undefined,
+  componentProps: undefined,
+  componentSlot: undefined,
+  helpMessage: undefined,
+  helpComponentProps: undefined,
+  required: false,
+  ifShow: undefined,
+  show: undefined,
+  rules: undefined,
+  asyncRules: undefined,
+};
+
 export default defineComponent({
   name: 'VnForm',
   components: { ElForm, ElFormItem, ElDivider, VnFormItem },
@@ -62,6 +83,10 @@ export default defineComponent({
       default: () => {
         return { lg: 12, md: 24 };
       }
+    },
+    asyncData: {
+      type: Object,
+      default: () => {}
     }
   },
   emits: ['submit'],
@@ -77,19 +102,25 @@ export default defineComponent({
     },
 
     getSchemas () {
-      return [...this.schemas];
+      return [...this.schemas.map(t => Object.assign({}, defaultSchema, t))];
     },
 
     fields () {
       return this.getSchemas.map(t => t.field).filter(t => !!t);
     },
+
+    values: {
+      get () {
+        return { ...this.formModel };
+      }
+    }
   },
 
   watch: {
     getSchemas: {
-      handler (schemas) {
-        if (schemas?.length) {
-          const model = initFormModel(schemas);
+      handler (val) {
+        if (val?.length) {
+          const model = initFormModel(val);
           this.formModel = model;
           this.defaultValues = { ...model };
         }
@@ -132,7 +163,7 @@ export default defineComponent({
 
       this.$refs.rawFormEl?.validate((valid) => {
         if (valid) {
-          this.$emit('submit', { ...this.formModel });
+          this.$emit('submit', this.values);
           console.log('success');
         } else {
           console.log('failed');

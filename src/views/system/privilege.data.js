@@ -24,6 +24,7 @@ export const formSchema = [
     label: '上级目录',
     placeholder: '上级目录',
     slot: 'parentId',
+    // component: 'Cascader',
     required: true,
   },
   {
@@ -49,8 +50,24 @@ export const formSchema = [
     field: 'url',
     label: '路由地址',
     component: 'Input',
-    required: true,
     ifShow: ({ values }) => PRIVILEGE.BUTTON.value !== values.type,
+    asyncRules: ({ values }) => [
+      {
+        validator (_, value, cb) {
+          if (!value) {
+            return cb(new Error('必填项'));
+          }
+
+          // console.log('#url asyncRules', values);
+          if (Array.isArray(values.data?.value) && values.data?.value.find(t => t.id !== values.id && t.url === value)) {
+            return cb(new Error('内容重复'));
+          }
+
+          return cb();
+        },
+        trigger: 'change'
+      }
+    ]
   },
   {
     field: 'path',
